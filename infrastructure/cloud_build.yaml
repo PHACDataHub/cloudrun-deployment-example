@@ -1,0 +1,19 @@
+steps:
+  # Install dependencies
+  - name: 'python:3.9'
+    entrypoint: 'pip'
+    args: ['install', '-r', 'djangoproject/requirements.txt']
+# will need to change the path of this
+
+  # Run tests
+  - name: 'python:3.9'
+    entrypoint: 'python'
+    args: ['manage.py', 'test']
+
+  # Build Docker image - thid is old!
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/web', '.']
+
+  # Push Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/web']

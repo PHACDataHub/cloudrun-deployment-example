@@ -1,0 +1,37 @@
+# For Artifact registry
+version: '2'
+services:
+  web:
+    build: ./djangoproject
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    image: northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/web
+   
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/hello_world
+
+  # db:
+  #   image: gcr.io/[PROJECT_ID]/db
+  #   volumes:
+  #     - ./db:/db
+
+  # For running locally
+# version: '1'
+# services:
+#   web:
+#     build: ./djangoproject
+#     command: python manage.py runserver 0.0.0.0:8000
+#     ports:
+#       - 8000:8000
+#     volumes:
+#       - .:/hello_world
+#     # depends_on:
+#     #   - db
+#   # db:
+#   #   image: postgres:latest
+#   #   environment:
+#   #     - POSTGRES_USER=myuser
+#   #     - POSTGRES_PASSWORD=mypassword
