@@ -1,9 +1,9 @@
 # Okay - need to look at https://github.com/PHACDataHub/cpho-phase2/blob/main/server/Dockerfile for example when revisit
 FROM python:3.9-slim
 
-# Install libpq-dev
-RUN apt-get update \
-    && apt-get install -y libpq-dev
+# # Install libpq-dev - not sure if 
+# RUN apt-get update \
+#     && apt-get install -y libpq-dev
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1, PYTHONDONTWRITEBYTECODE=1

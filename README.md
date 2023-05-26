@@ -15,12 +15,9 @@ Steps
 * Build app
 * Add tests
 * Containerize (add Dockerfile and requirement.txt to django project folder, create docker-compose.yaml to root)
-    * (in django project, can build with: 
-        * ``` docker build -t hello_world .```
-        * ``` docker run -p 8000:8000 hello_world ```
-    * or from root 
-        * ``` docker-compose up -d ```
-        * ``` docker-compose down ``` to tear down at end
+    * to run locally:
+    * ``` docker-compose up -d ```
+    * ``` docker-compose down ``` to tear down at end
 
 * Activate Artifact Registry
     ```$ gcloud services enable artifactregistry.googleapis.com``
@@ -29,18 +26,21 @@ Steps
     * Set environment variables
     ``` export PROJECT_ID="pdcp-cloud-014-lilakelland" \
         export REGION="northamerica-northeast1" \
-        export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \ ```
+        export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" ```
 
-    * Create repo
+    Create repo
     ``` gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
     --repository-format=docker \
     --location=${REGION} \
     --description="${ARTIFACT_REGISTRY_REPO_NAME}" ```
 
-* authorize docker to push to artifact registry
-```$ gcloud auth configure-docker ```
+    *Turn on vunerability scanning in the gui!*
 
-*Turn on vunerability scanning*
+* Authorize docker to push images to artifact registry
+```$ gcloud auth configure-docker ```
+    * build and push image to registry
+    ``` $ docker-compose build  ```
+    ```$ docker-compose push ```
 
 * Activate cloud run
     ```$ gcloud services enable run.googleapis.com ``
@@ -49,12 +49,9 @@ Steps
 
 Next steps 
 * add secrets
-* connect to db
-* modify to connect to db (or fork an existing project and use in this example)
-
-### To Run 
-``` $ cd djangoproject ```
-``` $ python manage.py runserver ```
+* AlloyDB
+* Github actions with cloud run
+* Apply to exisiting repo
 
 ### Run tests
 (in django project directory)

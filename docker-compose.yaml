@@ -1,5 +1,5 @@
 # For Artifact registry
-version: '2'
+version: '1'
 services:
   web:
     build: ./djangoproject
@@ -13,25 +13,8 @@ services:
     volumes:
       - .:/hello_world
 
-  # db:
-  #   image: gcr.io/[PROJECT_ID]/db
-  #   volumes:
-  #     - ./db:/db
+ 
 
-  # For running locally
-# version: '1'
-# services:
-#   web:
-#     build: ./djangoproject
-#     command: python manage.py runserver 0.0.0.0:8000
-#     ports:
-#       - 8000:8000
-#     volumes:
-#       - .:/hello_world
-#     # depends_on:
-#     #   - db
-#   # db:
-#   #   image: postgres:latest
-#   #   environment:
-#   #     - POSTGRES_USER=myuser
-#   #     - POSTGRES_PASSWORD=mypassword
+  # For running locally - remove image
+  # TODO - add postgres/ alloydb
+
