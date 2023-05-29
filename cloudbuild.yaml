@@ -10,6 +10,7 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         # docker context _root
         # "apps/${_SERVICE_NAME}/.",
+        # northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/djangoproject
         "djangoproject/."
       ]
   # Push the container image to Container Registry #TODO - transition name to artifact registry

@@ -6,7 +6,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
-    image: northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/web
+    image: northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/djangoproject
    
     ports:
       - 8000:8000
