@@ -11,6 +11,14 @@ Resources:
 * https://cloud.google.com/run/docs/deploying#sidecars
 * https://cloud.google.com/run/docs/quickstarts/deploy-continuously 
 
+* https://github.com/GoogleCloudPlatform/alloydb-auth-proxy
+* https://cloud.google.com/sql/docs/postgres/connect-instance-cloud-run
+* https://cloud.google.com/sql/docs/mysql/connect-run
+* https://cloud.google.com/sql/docs/mysql/connect-run#private-ip
+
+* https://codelabs.developers.google.com/create-alloydb-database-with-cloud-run-job
+
+
 Steps 
 * Build app
 * Add tests
@@ -24,7 +32,7 @@ Steps
 
 * Create artifact repo
     * Set environment variables
-    ``` export PROJECT_ID="pdcp-cloud-014-lilakelland" \
+    ``` export PROJECT_ID="phx-hellodjango" \
         export REGION="northamerica-northeast1" \
         export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" ```
 
