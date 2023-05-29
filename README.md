@@ -58,8 +58,28 @@ Steps
 Next steps 
 * add secrets
 * AlloyDB
-* Github actions with cloud run
-* Apply to exisiting repo
+* Github actions with cloud run:
+
+*   Set up permssions
+    https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:service-71366405699@serverless-robot-prod.iam.gserviceaccount.com" \
+    --role="roles/iam.serviceAccountTokenCreator" --role="roles/run.admin"   --role="roles/iam.serviceAccountUser"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID   --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"   --role="roles/run.admin"   --role="roles/iam.serviceAccountUser" --role="roles/iam.serviceAccountTokenCreator"
+<!-- export PROJECT_ID="phx-hellodjango"
+export GITHUB_REPO_NAME="cloudrun-deployment-example"
+
+gcloud builds triggers create github \
+  --name=test-site-nginx-001 \
+  --region ${REGION} \
+  --repo-name=${GITHUB_REPO_NAME} \
+  --repo-owner=daneroo \
+  --branch-pattern="^main$" \
+  --build-config=apps/site-nginx/cloudbuild.yaml -->
+
+* Apply to exisiting PHAC project
 
 ### Run tests
 (in django project directory)
