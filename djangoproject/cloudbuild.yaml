@@ -1,46 +1,9 @@
 # # Modified from https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
 # # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
-# # steps:
-# #   # Build the container image 
-# #   - name: "gcr.io/cloud-builders/docker"
-# #     args: [
-# #         "build",
-# #         "-t",
-# #         # Fully qualified container registry image name
-# #         # "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-# #         # docker context _root
-# #         # "apps/${_SERVICE_NAME}/.",
-# #         "northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/djangoproject"
-# #         # "djangoproject/."
-# #       ]
-# #   # Push the container image to Container Registry #TODO - transition name to artifact registry
-# #   - name: "gcr.io/cloud-builders/docker"
-# #     args:
-# #       [
-# #         "push",
-# #         "northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/djangoproject"
-# #         # "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-# #       ]
-# #   # Deploy container image to Cloud Run
-# #   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-# #     entrypoint: gcloud
-# #     args:
-# #       - "run"
-# #       - "deploy"
-# #       - "${_SERVICE_NAME}"
-# #       - "--image"
-# #       - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-# #       - "--region"
-# #       - "${_REGION}"
-# #       - "--allow-unauthenticated"
 
-# # substitutions:
-# #   # The must start with a "_" (_[A-Z0-9_]+)
-# #   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
-# #   _SERVICE_NAME: "djangoproject"
-# #   _REGION: "northamerica-northeast1"
-# # images:
-# #   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+
+
+
 
 steps:
   # Build the container image
@@ -50,8 +13,8 @@ steps:
         "-t",
         # Fully qualified container registry image name
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-        # docker context _root
-        "apps/${_SERVICE_NAME}/.",
+        # docker context _root  - QUESTION DOES IT MATTER WHERE THIS IS? IS THIS RELATIVE?
+        "${_SERVICE_NAME}/.",
       ]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
@@ -73,9 +36,10 @@ steps:
       - "${_REGION}"
       - "--allow-unauthenticated"
 
+
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
-  _ARTIFACT_REGISTRY_REPO: " hello-world-app"
+  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME: "djangoproject"
   _REGION: "northamerica-northeast1"
 images:
