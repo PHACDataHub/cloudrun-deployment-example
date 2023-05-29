@@ -85,14 +85,22 @@ steps:
   #   args: ['-f', 'docker-compose.yaml', 'up', '-d']
 
   #   # Deploy container image to Cloud Run
-  # - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-  #   entrypoint: gcloud
-  #   args:
-  #     - "run"
-  #     - "deploy"
-  #     - "${_SERVICE_NAME}"
-  #     - "--image"
-  #     - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-  #     - "--region"
-  #     - "${_REGION}"
-  #     - "--allow-unauthenticated"
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_SERVICE_NAME}"
+      - "--image"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      - "--region"
+      - "${_REGION}"
+      - "--allow-unauthenticated"
+
+substitutions:
+  # The must start with a "_" (_[A-Z0-9_]+)
+  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
+  _SERVICE_NAME: "djangoproject"
+  _REGION: "northamerica-northeast1"
+images:
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
