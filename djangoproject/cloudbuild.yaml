@@ -2,9 +2,6 @@
 # # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
 
 
-
-
-
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
