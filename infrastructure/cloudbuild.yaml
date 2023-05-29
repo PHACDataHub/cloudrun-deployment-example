@@ -1,6 +1,6 @@
 # Modified from https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
 steps:
-  # Build the container image
+  # Build the container image #TODO - transition name to artifact registry
   - name: "gcr.io/cloud-builders/docker"
     args: [
         "build",
@@ -10,7 +10,7 @@ steps:
         # docker context _root
         "apps/${_SERVICE_NAME}/.",
       ]
-  # Push the container image to Container Registry
+  # Push the container image to Container Registry #TODO - transition name to artifact registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -25,7 +25,6 @@ steps:
       - "deploy"
       - "${_SERVICE_NAME}"
       - "--image"
-      # - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
       - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
       - "--region"
       - "${_REGION}"
@@ -53,8 +52,8 @@ images:
 
 #   # Build Docker image - this is old!
 #   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/web', '.']
+#     args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/hello-world-app/hello-world-app/web', '.']
 
 #   # Push Docker image to Container Registry
 #   - name: 'gcr.io/cloud-builders/docker'
-#     args: ['push', 'northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/web']
+#     args: ['push', 'northamerica-northeast1-docker.pkg.dev/hello-world-app/hello-world-app/web']
