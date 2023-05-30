@@ -31,7 +31,7 @@ steps:
         # Artifact registry image name in form: HOST-NAME/PROJECT-ID/REPOSITORY/IMAGE
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
-        "${_SERVICE_NAME}/.",
+        "djangoproject/.",
       ]
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
