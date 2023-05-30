@@ -57,7 +57,7 @@ Steps
 
 * Activate cloud run
     ```$ gcloud services enable run.googleapis.com ``
-    * Add permissions ``` gcloud projects add-iam-policy-binding pdcp-cloud-014-lilakelland --member=serviceAccount:294163875507@cloudbuild.gserviceaccount.com --role=roles/run.viewer ```
+    <!-- * Add permissions ``` gcloud projects add-iam-policy-binding pdcp-cloud-014-lilakelland --member=serviceAccount:294163875507@cloudbuild.gserviceaccount.com --role=roles/run.viewer ``` -->
 
 
 * Add sidecar yaml
