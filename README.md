@@ -20,6 +20,7 @@ Resources:
 
 * https://www.cloudskillsboost.google/course_sessions/3132244/labs/339626
 
+Running @ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 
 Steps 
 * Build app
