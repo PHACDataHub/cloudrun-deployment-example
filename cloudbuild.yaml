@@ -56,7 +56,8 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "${_SERVICE_NAME}"
+      # - "${_SERVICE_NAME}"
+      - "hello-world-app"
       - "--image"
       # - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
       - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
