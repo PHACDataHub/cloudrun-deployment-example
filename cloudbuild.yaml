@@ -1,6 +1,10 @@
-# # Modified from https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
-# # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
-#  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
+# cloudbuild.yaml
+
+# # Modified from 
+  # https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
+# # Other referencs:
+  # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
+  #  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
 
 # This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
 
@@ -11,6 +15,7 @@ steps:
 #     entrypoint: 'pip'
 #     args: ['install', '-r', 'djangoproject/requirements.txt']
 # # will need to change the path of this
+
 
 #   # Run tests
 #   - name: 'python:3.9'
@@ -28,7 +33,7 @@ steps:
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "${_SERVICE_NAME}/.",
       ]
-  # This is the same as:
+  # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
 
 
@@ -66,3 +71,20 @@ substitutions:
   _REGION: "northamerica-northeast1"
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+
+
+# # connect cloud build with github
+# gcloud builds triggers import \
+#     --repo=cloudrun-deployment-example \
+#     --repo-url=https://github.com/PHACDataHub/cloudrun-deployment-example \
+#     --branch=main
+
+
+# # cloud build trigger creation
+# gcloud builds triggers create github \
+#   --name=test-trigger \
+#   --region ${REGION} \
+#   --repo-name=cloudrun-deployment-example \
+#   --repo-owner=PHACDataHub \
+#   --branch-pattern="^main$" \
+#   --build-config=cloudbuild.yaml
