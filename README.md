@@ -18,6 +18,8 @@ Resources:
 
 * https://codelabs.developers.google.com/create-alloydb-database-with-cloud-run-job
 
+* https://www.cloudskillsboost.google/course_sessions/3132244/labs/339626
+
 
 Steps 
 * Build app
@@ -30,17 +32,19 @@ Steps
 * Activate Artifact Registry
     ```$ gcloud services enable artifactregistry.googleapis.com``
 
-* Create artifact repo
-    * Set environment variables
+* Create artifact repo:
+    1. Set environment variables
     ``` export PROJECT_ID="phx-hellodjango" \
         export REGION="northamerica-northeast1" \
-        export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" ```
+        export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" 
+    ```
 
-    Create repo
+    2. Create repo
     ``` gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
     --repository-format=docker \
     --location=${REGION} \
-    --description="${ARTIFACT_REGISTRY_REPO_NAME}" ```
+    --description="${ARTIFACT_REGISTRY_REPO_NAME}" 
+    ```
 
     *Turn on vunerability scanning in the gui!*
 
@@ -69,20 +73,27 @@ Next steps
 
 gcloud projects add-iam-policy-binding $PROJECT_ID   --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"   --role="roles/run.admin"   --role="roles/iam.serviceAccountUser" --role="roles/iam.serviceAccountTokenCreator" -->
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
+<!-- gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
   --role="roles/run.serviceAgent" \
   --condition=None
-<!-- export PROJECT_ID="phx-hellodjango"
-export GITHUB_REPO_NAME="cloudrun-deployment-example"
 
+  gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:71366405699@cloudbuild.gserviceaccount.com --role=roles/storage.objectViewer -->
+
+<!-- #### Deploy to cloud run
+gcloud run deploy testing-service --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated -->
+<!-- 
+ERROR: (gcloud.run.deploy) User [lila.kelland@gcp.hc-sc.gc.ca] does not have permission to access namespaces instance [phx-hellodjango] (or it may not exist): Google Cloud Run Service Agent does not have permission to get access tokens for the service account 71366405699-compute@developer.gserviceaccount.com. Please give service-71366405699@serverless-robot-prod.iam.gserviceaccount.com permission iam.serviceAccounts.getAccessToken on the service account. Alternatively, if the service account is unspecified or in the same project you are deploying in, ensure that the Service Agent is assigned the Google Cloud Run Service Agent role roles/run.serviceAgent. -->
+
+
+<!-- 
 gcloud builds triggers create github \
   --name=test-site-nginx-001 \
   --region ${REGION} \
   --repo-name=${GITHUB_REPO_NAME} \
   --repo-owner=daneroo \
   --branch-pattern="^main$" \
-  --build-config=apps/site-nginx/cloudbuild.yaml -->
+  --build-config=apps/site-nginx/cloudbuild.yaml --> -->
 
 * Apply to exisiting PHAC project
 

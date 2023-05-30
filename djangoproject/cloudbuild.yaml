@@ -1,59 +1,11 @@
 # # Modified from https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
 # # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
+#  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
 
+# This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
 
 steps:
-  # Build the container image
-  - name: "gcr.io/cloud-builders/docker"
-    args: [
-        "build",
-        "-t",
-        # Fully qualified container registry image name
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-        # docker context _root  - QUESTION DOES IT MATTER WHERE THIS IS? IS THIS RELATIVE?
-        "${_SERVICE_NAME}/.",
-      ]
-  # Push the container image to Container Registry
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-      ]
-  # Deploy container image to Cloud Run
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: gcloud
-    args:
-      - "run"
-      - "deploy"
-      - "${_SERVICE_NAME}"
-      - "--image"
-      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      - "--region"
-      - "${_REGION}"
-      - "--allow-unauthenticated"
 
-
-substitutions:
-  # The must start with a "_" (_[A-Z0-9_]+)
-  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
-  _SERVICE_NAME: "djangoproject"
-  _REGION: "northamerica-northeast1"
-images:
-  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-
-
-
-# # #cloudbuild.yaml from https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
-# # steps:
-# # - name: 'docker/compose:1.19.0'
-# #   args: ['up', '-d']
-# # - name: 'gcr.io/cloud-builders/docker'
-# #   # args: ['tag', 'workspace_app:latest', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
-# #   args: [ 'gcr.io/$PROJECT_ID/$REPO_NAME']
-# # images: ['gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
-
-# steps:
 #   # Install dependencies
 #   - name: 'python:3.9'
 #     entrypoint: 'pip'
@@ -65,67 +17,52 @@ images:
 #     entrypoint: 'python'
 #     args: ['djangoproject/manage.py', 'test', 'hello_world']
 
-#   # # Build Docker image - this is old!
-#   # - name: 'gcr.io/cloud-builders/docker'
-#   #   args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/hello-world-app/web', '.']
+
+# Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+        "build",
+        "-t",
+        # Artifact registry image name in form: HOST-NAME/PROJECT-ID/REPOSITORY/IMAGE
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        # docker context _root  (where you'd find the Dockerfile in project to build/ push)
+        "${_SERVICE_NAME}/.",
+      ]
+  # This is the same as:
+  #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
 
 
-#   # # Push Docker image to Container Registry
-#   # - name: 'gcr.io/cloud-builders/docker'
-#   #   args: ['push', 'northamerica-northeast1-docker.pkg.dev/hello-world-app/web']
-#     - name: 'gcr.io/cloud-builders/docker-compose'
-#       # args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/hello-world-app/web', '.']
-#       args: ['build']
+# Push the container image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+      ]
+  This is the ~ to:
+  # $ docker push northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world
 
-#   # Step 2: Push the built images to a container registry
-#     - name: 'gcr.io/cloud-builders/docker'
-#       args: ['push']
-#       # args: ['push' 'northamerica-northeast1-docker.pkg.dev/hello-world-app/web']
 
-#   # # Step 3: Deploy the Docker Compose project using the built images
-#   # - name: 'gcr.io/cloud-builders/docker-compose'
-#   #   args: ['-f', 'docker-compose.yaml', 'up', '-d']
+# Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_SERVICE_NAME}"
+      - "--image"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      - "--region"
+      - "${_REGION}"
+      - "--allow-unauthenticated"
+# Similar to:
+#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated
 
-#   #   # Deploy container image to Cloud Run
-#   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-#     entrypoint: gcloud
-#     args:
-#       - "run"
-#       - "deploy"
-#       - "${_SERVICE_NAME}"
-#       - "--image"
-#       - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-#       - "--region"
-#       - "${_REGION}"
-#       - "--allow-unauthenticated"
-
-# substitutions:
-#   # The must start with a "_" (_[A-Z0-9_]+)
-#   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
-#   _SERVICE_NAME: "djangoproject"
-#   _REGION: "northamerica-northeast1"
-# images:
-#   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-
-# steps:
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args:
-#   - 'run'
-#   - 'deploy'
-#   - 'cloudrunservice'
-#   - '--image'
-#   - 'northamerica-northeast1-docker.pkg.dev/hello-world-app/djangoproject'
-#   - '--region'
-#   - 'northamerica-northeast1'
-#   - '--platform'
-#   - 'managed'
-#   - '--allow-unauthenticated'
-
-  # gcloud builds triggers create github \
-  # --name=test-hello-world-deploy-001 \
-  # --region ${REGION} \
-  # --repo-name=PHACDataHub/${GITHUB_REPO_NAME} \
- 
-  # --branch-pattern="^main$" \
-  # --build-config=cloudbuild.yaml
-   # --repo-owner=LilaKelland \
+substitutions:
+  # The must start with a "_" (_[A-Z0-9_]+)
+  # _ARTIFACT_REGISTRY_REPO: "hello-world-app"
+  _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
+  _SERVICE_NAME: "hello-world"
+  _REGION: "northamerica-northeast1"
+images:
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
