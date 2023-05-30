@@ -56,11 +56,11 @@ steps:
     args:
       - "run"
       - "deploy"
-      # - "${_SERVICE_NAME}"
-      - "hello-world-app"
+      - "${_SERVICE_NAME}"
+      # - "hello-world-app"
       - "--image"
-      # - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      # - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
       - "--region"
       - "${_REGION}"
       - "--allow-unauthenticated"
@@ -69,8 +69,8 @@ steps:
 
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
-  # _ARTIFACT_REGISTRY_REPO: "hello-world-app"
-  _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
+  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
+  # _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
 images:
@@ -78,17 +78,13 @@ images:
 
 
 # # connect cloud build with github
-# gcloud builds triggers import \
-#     --repo=cloudrun-deployment-example \
-#     --repo-url=https://github.com/PHACDataHub/cloudrun-deployment-example \
-#     --branch=main
-
+# can do through console
 
 # # cloud build trigger creation
 # gcloud builds triggers create github \
-#   --name=test-trigger \
+#   --name=hello-world-deploy-trigger \
 #   --region ${REGION} \
 #   --repo-name=cloudrun-deployment-example \
 #   --repo-owner=PHACDataHub \
 #   --branch-pattern="^main$" \
-#   --build-config=cloudbuild.yaml
+#   --build-config=cloudbuild.yaml 
