@@ -9,7 +9,7 @@
 
 # This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
 
-# steps:
+steps:
 #   - name: python:3.9
 #     id: INSTALL
 #     entrypoint: python3
