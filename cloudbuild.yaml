@@ -76,8 +76,8 @@ steps:
         "build",
         "-t",
         # Artifact registry image name in form: HOST-NAME/PROJECT-ID/REPOSITORY/IMAGE
-        # "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-        "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        # "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}",
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
@@ -92,8 +92,8 @@ steps:
     args:
       [
         "push",
-        "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
-        # "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        # "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
   # This is the ~ to:
   # $ docker push northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world
@@ -107,8 +107,8 @@ steps:
       - "deploy"
       - "${_SERVICE_NAME}"
       - "--image"
-      # - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      # - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
       - "--region"
       - "${_REGION}"
       - "--allow-unauthenticated"
@@ -118,10 +118,9 @@ steps:
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
-  # _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
-  # PROJECT_ID: "pdcp-cloud-014-lilakelland"
+
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
