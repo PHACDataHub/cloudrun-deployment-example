@@ -1,0 +1,32 @@
+# For AlloyDB side-car
+#https://cloud.google.com/run/docs/deploying#yaml
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+     run.googleapis.com/launch-stage: BETA
+  name: ${_SERVICE_NAME}
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen1 
+    spec:
+      containers:
+      # Ingress image
+      - image: "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME_INGRESS}:${COMMIT_SHA}"
+        ports:
+          - containerPort: ${CONTAINER_PORT}
+      # Sidecar image
+      - image: "${_REGION}-docker.pkg.dev/$_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME_SIDECAR}:${COMMIT_SHA}"
+substitutions:
+  # The must start with a "_" (_[A-Z0-9_]+)
+  _SERVICE_NAME: "hello-world"
+  _REGION: "northamerica-northeast1"
+  _PROJECT_ID: "pdcp-cloud-014-lilakelland"
+  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
+  _SERVICE_NAME_INGRESS: "hello-world"
+  SERVICE_NAME_SIDECAR: "hello-world-db"
+  CONTAINER_PORT: '5000'
+  SIDECAR_IMAGE: "northamerica-northeast1"

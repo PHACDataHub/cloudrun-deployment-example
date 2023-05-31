@@ -5,22 +5,69 @@
 # # Other referencs:
   # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
   #  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
+  # https://medium.com/kunder/how-to-integrate-github-checks-with-google-cloud-build-and-python-tests-5fd05c4f3dff
 
 # This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
 
-steps:
+# steps:
+#   - name: python:3.9
+#     id: INSTALL
+#     entrypoint: python3
+#     args:
+#     - '-m'
+#     - 'pip'
+#     - 'install'
+#     - '-t'
+#     - '.'
+#     - '-r'
+#     - 'djangoproject/requirements.txt'
 
-#   # Install dependencies
-#   - name: 'python:3.9'
-#     entrypoint: 'pip'
-#     args: ['install', '-r', 'djangoproject/requirements.txt']
-# # will need to change the path of this
+  # Install dependencies
+  - name: 'python:3.9'
+    entrypoint: 'pip'
+    args: ['install', '-r', 'djangoproject/requirements.txt']
 
 
-#   # Run tests
-#   - name: 'python:3.9'
-#     entrypoint: 'python'
-#     args: ['djangoproject/manage.py', 'test', 'hello_world']
+  # Run tests
+  - name: 'python:3.9'
+    entrypoint: 'python'
+    args: ['djangoproject/manage.py', 'test', 'hello_world']
+
+# # Unit tests
+#   - name: python:3.9
+#     entrypoint: python3
+#     id: RUN-UNIT-TESTS
+#     args:
+#     - '-m'
+#     - 'nose2'
+#     - '-s'
+#     - 'functions'
+#     - '-c'
+#     - 'functions/nose2.cfg'
+#     waitFor:
+#     - INSTALL
+
+# # Test coverage
+#   - name: python:3.9
+#     entrypoint: python3
+#     id: RUN-COVERAGE-TESTS
+#     args:
+#     - '-c'
+#     - 'import sys; from pycobertura import Cobertura, TextReporter; cobertura = Cobertura("functions/coverage.xml"); tr = TextReporter(cobertura); coverage = tr.generate().split(" ")[-1].strip("%"); print("Coverage OK:",coverage + "% > 90%") if float(coverage) > 90 else sys.exit("Coverage is less than 90%")'
+#     waitFor:
+#     - RUN-UNIT-TESTS
+
+# # Lint
+#   - name: python:3.9
+#     entrypoint: python3
+#     id: RUN-LINTER-CHECK
+#     args:
+#     - '-m'
+#     - 'flake8'
+#     - '--ignore=E501'
+#     - 'functions/'
+#     waitFor:
+#     - INSTALL
 
 
 # Build the container image
@@ -34,6 +81,8 @@ steps:
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
+    waitFor:
+    - RUN-UNIT-TESTS
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
 
@@ -57,9 +106,8 @@ steps:
       - "run"
       - "deploy"
       - "${_SERVICE_NAME}"
-      # - "hello-world-app"
       - "--image"
-      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
       # - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
       - "--region"
       - "${_REGION}"
@@ -73,18 +121,13 @@ substitutions:
   # _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
+  PROJECT_ID: "pdcp-cloud-014-lilakelland"
 images:
-  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+  - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
 
 # # connect cloud build with github
 # can do through console
 
 # # cloud build trigger creation
-# gcloud builds triggers create github \
-#   --name=hello-world-deploy-trigger \
-#   --region ${REGION} \
-#   --repo-name=cloudrun-deployment-example \
-#   --repo-owner=PHACDataHub \
-#   --branch-pattern="^main$" \
-#   --build-config=cloudbuild.yaml 
+
