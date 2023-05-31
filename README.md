@@ -40,6 +40,7 @@ export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(p
 
 ### Artifact Registry
 1. Activate Artifact Registry
+
 ```$ gcloud services enable artifactregistry.googleapis.com```
 
 2. Create repo
@@ -47,7 +48,7 @@ export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(p
 gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
    --repository-format=docker \
    --location=${REGION} \
-   --description="${ARTIFACT_REGISTRY_REPO_NAME}" 
+   --description=${ARTIFACT_REGISTRY_REPO_NAME}
 ```
 3. Allow service account to read from the Artifact Registry
 ```
