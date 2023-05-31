@@ -81,8 +81,8 @@ steps:
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
-    waitFor:
-    - RUN-UNIT-TESTS
+    # waitFor:
+    # - RUN-UNIT-TESTS
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
 
