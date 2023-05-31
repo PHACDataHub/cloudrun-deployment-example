@@ -17,8 +17,10 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 * Add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
 
 To run locally:
-    * ``` docker-compose up -d ```
-    * ``` docker-compose down ``` to tear down at end
+
+```$ docker-compose up -d ```
+
+```$ docker-compose down ``` to tear down at end
 
 ### Authenticate GCP
 Login to gcloud and set project
@@ -29,20 +31,23 @@ Login to gcloud and set project
 
 Set environment variables
 
-``` export PROJECT_ID="phx-hellodjango" \
-    export REGION="northamerica-northeast1" \
-    export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \
-    export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")```
+``` 
+export PROJECT_ID="phx-hellodjango" \
+export REGION="northamerica-northeast1" \
+export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \
+export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
+```
 
 ### Artifact Registry
 1. Activate Artifact Registry
 ```$ gcloud services enable artifactregistry.googleapis.com```
 
 2. Create repo
-``` gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
---repository-format=docker \
---location=${REGION} \
---description="${ARTIFACT_REGISTRY_REPO_NAME}" 
+``` 
+gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
+   --repository-format=docker \
+   --location=${REGION} \
+   --description="${ARTIFACT_REGISTRY_REPO_NAME}" 
 ```
 3. Allow service account to read from the Artifact Registry
 ```
@@ -60,9 +65,9 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 ```$ gcloud auth configure-docker ```
 * build and push image to registry
     ``` $ docker-compose build  ```
-    ```$ docker-compose push ``` -->
+    ```$ docker-compose push ```  -->
 
-    *Turn on vunerability scanning in the gui!*
+*Turn on vunerability scanning in the gui!*
 
 ### Cloud Build
 1. Activate
