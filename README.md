@@ -1,5 +1,5 @@
 # Cloudrun Deployment Example
-Deploying Django apps to Google Cloud Run using AlloyDB (via auth proxy sidecar) and GitHub Actions.
+Working towards deploying Django apps to Google Cloud Run using AlloyDB (via auth proxy sidecar) and GitHub Actions.
 
 *Work in progress - determining a workflow using a hello-world app and postgres-like db, then will apply to a more applicable projects*
 
@@ -13,32 +13,38 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 
 * Set up DNS and add to approved hosts (in settings.py) if using Django
 
-### Containerize (add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root)
-    * to run locally:
+### Containerize 
+* Add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
+
+To run locally:
     * ``` docker-compose up -d ```
     * ``` docker-compose down ``` to tear down at end
 
 ### Authenticate GCP
 Login to gcloud and set project
-    * ```$ gcloud auth login```
-    * ```$ gcloud config set project phx-hellodjango```
-### Artifact Registry
-1. Activate
-    ```$ gcloud services enable artifactregistry.googleapis.com``
 
-1. Set environment variables
+```$ gcloud auth login```
+
+```$ gcloud config set project phx-hellodjango```
+
+Set environment variables
+
 ``` export PROJECT_ID="phx-hellodjango" \
     export REGION="northamerica-northeast1" \
     export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \
-    export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
-```
+    export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")```
+
+### Artifact Registry
+1. Activate Artifact Registry
+```$ gcloud services enable artifactregistry.googleapis.com```
+
 2. Create repo
 ``` gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
 --repository-format=docker \
 --location=${REGION} \
 --description="${ARTIFACT_REGISTRY_REPO_NAME}" 
 ```
-3. Allow service account to read from the registry
+3. Allow service account to read from the Artifact Registry
 ```
 gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
     --location=${REGION} \
@@ -46,7 +52,10 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
     --role="roles/artifactregistry.reader"
 ```
 4. Authorize docker to push images to artifact registry
-```$ gcloud auth configure-docker ${REGION}-docker.pkg.dev``` *not sure if we need to do this if deploying through cloud build triggers*
+
+```$ gcloud auth configure-docker ${REGION}-docker.pkg.dev``` 
+
+*not sure if we need to do this if deploying through cloud build triggers*
 <!-- * Authorize docker to push images to artifact registry 
 ```$ gcloud auth configure-docker ```
 * build and push image to registry
@@ -57,6 +66,7 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 
 ### Cloud Build
 1. Activate
+
 ```$ gcloud services enable cloudbuild.googleapis.com```
 
 2. Add cloud build trigger
@@ -75,6 +85,7 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 ~gcloud run deploy testing-service --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated~ (defined in cloudbuild.yaml)
 ### AlloyDB
 * Activate (for this we need AlloyDB, Compute Engine, Resource Manager and Service Networking APIs)
+
 ```$ gcloud services enable alloydb.googleapis.com compute.googleapis.com cloudresourcemanager.googleapis.com servicenetworking.googleapis.com```
 * Add sidecar yaml
 * set up private network for AlloyDB
@@ -90,41 +101,14 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 * Run tests in CI
 * Github actions (or somehting to reflect errors without going into cloud build to see)
 * secret management
-
-<!-- gcloud projects add-iam-policy-binding $PROJECT_ID \
-    --member="serviceAccount:service-71366405699@serverless-robot-prod.iam.gserviceaccount.com" \
-    --role="roles/iam.serviceAccountTokenCreator" --role="roles/run.admin"   --role="roles/iam.serviceAccountUser"
-
-gcloud projects add-iam-policy-binding $PROJECT_ID   --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"   --role="roles/run.admin"   --role="roles/iam.serviceAccountUser" --role="roles/iam.serviceAccountTokenCreator" -->
-
-<!-- gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
-  --role="roles/run.serviceAgent" \
-  --condition=None
-
-  gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:71366405699@cloudbuild.gserviceaccount.com --role=roles/storage.objectViewer -->
-
-<!-- #### Deploy to cloud run
--->
-
-<!-- 
-gcloud builds triggers create github \
-  --name=test-site-nginx-001 \
-  --region ${REGION} \
-  --repo-name=${GITHUB_REPO_NAME} \
-  --repo-owner=daneroo \
-  --branch-pattern="^main$" \
-  --build-config=apps/site-nginx/cloudbuild.yaml --> -->
-
 * Apply to exisiting PHAC project
+* change to pdm and add requirements. learn how these are being built - venvs or pdm
+* Automate approved hosts
 
-### Run tests
+#### Run tests (locally)
 (in django project directory)
+
 ``` python manage.py test hello_world ```
-
-TODO - change to pdm and add requirements. 
-learn how these are being built - venvs or pdm
-
 
 Resources:
 * https://github.com/google-github-actions/deploy-cloudrun
