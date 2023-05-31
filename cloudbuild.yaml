@@ -121,7 +121,7 @@ substitutions:
   # _ARTIFACT_REGISTRY_REPO: pdcp-cloud-014-lilakelland
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
-  PROJECT_ID: "pdcp-cloud-014-lilakelland"
+  # PROJECT_ID: "pdcp-cloud-014-lilakelland"
 images:
   - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
