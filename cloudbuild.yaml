@@ -123,7 +123,7 @@ substitutions:
   _REGION: "northamerica-northeast1"
   # PROJECT_ID: "pdcp-cloud-014-lilakelland"
 images:
-  - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
 
 # # connect cloud build with github
