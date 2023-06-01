@@ -9,7 +9,7 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 ## Steps to deploy
 ### Build app
 * Using a django app here as an example
-* Add tests - key component of ensuring no breaking changes with continuous deployment
+* Add tests - a key component to reducing breaking changes with continuous deployment
 
 * Set up DNS and add to approved hosts (in settings.py) if using Django
 
@@ -38,7 +38,7 @@ export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \
 export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
 ```
 
-### Artifact Registry
+### Add to Artifact Registry
 1. Activate Artifact Registry
 
 ```$ gcloud services enable artifactregistry.googleapis.com```
@@ -52,10 +52,10 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
 ```
 3. Allow service account to read from the Artifact Registry
 ```
-gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
+~gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
     --location=${REGION} \
     --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
-    --role="roles/artifactregistry.reader"
+    --role="roles/artifactregistry.reader"~
 ```
 4. Authorize docker to push images to artifact registry
 
@@ -70,10 +70,12 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 
 *Turn on vunerability scanning in the gui!*
 
-### Cloud Build
+### Set up Cloud Build 
 1. Activate
 
 ```$ gcloud services enable cloudbuild.googleapis.com```
+
+2. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
 
 2. Add cloud build trigger
 ```$ gcloud builds triggers create github \
@@ -84,11 +86,11 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
   --branch-pattern="^main$" \
   --build-config=cloudbuild.yaml 
   ```
-### Cloud Run 
+### Set up Cloud Run 
 * Activate 
     ```$ gcloud services enable run.googleapis.com ```
 * Create Service
-~gcloud run deploy testing-service --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated~ (defined in cloudbuild.yaml)
+~gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated~ (defined in cloudbuild.yaml)
 ### AlloyDB
 * Activate (for this we need AlloyDB, Compute Engine, Resource Manager and Service Networking APIs)
 

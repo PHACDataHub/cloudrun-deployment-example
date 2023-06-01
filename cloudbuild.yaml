@@ -10,28 +10,32 @@
 # This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
 
 steps:
-#   - name: python:3.9
-#     id: INSTALL
-#     entrypoint: python3
-#     args:
-#     - '-m'
-#     - 'pip'
-#     - 'install'
-#     - '-t'
-#     - '.'
-#     - '-r'
-#     - 'djangoproject/requirements.txt'
+  - name: python:3.9
+    id: INSTALL
+    entrypoint: python3
+    args:
+    - '-m'
+    - 'pip'
+    - 'install'
+    - '-t'
+    - '.'
+    - '-r'
+    - 'djangoproject/requirements.txt'
+    # python3 -m pip uninstall -t . -r djangoproject/requirements.txt
 
-  # Install dependencies
+  # # Install dependencies
   # - name: 'python:3.9'
+  #   id: INSTALL
   #   entrypoint: 'pip'
   #   args: ['install', '-r', 'djangoproject/requirements.txt']
+  #   # pip install -r djangoproject/requirements.txt
 
 
-  # # Run tests
-  # - name: 'python:3.9'
-  #   entrypoint: 'python'
-  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
+  # Run tests
+  - name: 'python:3.9'
+    entrypoint: 'python'
+    args: ['djangoproject/manage.py', 'test', 'hello_world']
+  # python djangoproject/manage.py test hello_world
 
 # # Unit tests
 #   - name: python:3.9
@@ -68,7 +72,9 @@ steps:
 #     - 'functions/'
 #     waitFor:
 #     - INSTALL
-
+#  python djangoproject/manage.py check 
+#  or 
+#  flake8 .
 
 # Build the container image
   - name: "gcr.io/cloud-builders/docker"
@@ -77,14 +83,13 @@ steps:
         "-t",
         # Artifact registry image name in form: HOST-NAME/PROJECT-ID/REPOSITORY/IMAGE
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-        # "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}",
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
     # waitFor:
     # - RUN-UNIT-TESTS
   # This is ~ as:
-  #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world djangoproject/.
+  #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
 
 
 # Push the container image to Artifact Registry
@@ -92,11 +97,10 @@ steps:
     args:
       [
         "push",
-        # "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
   # This is the ~ to:
-  # $ docker push northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world
+  # $ docker push northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world
 
 
 # Deploy container image to Cloud Run
@@ -108,12 +112,11 @@ steps:
       - "${_SERVICE_NAME}"
       - "--image"
       - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      # - "northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world:${COMMIT_SHA}"
       - "--region"
       - "${_REGION}"
       - "--allow-unauthenticated"
 # Similar to:
-#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/pdcp-cloud-014-lilakelland/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated
+#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated
 
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
