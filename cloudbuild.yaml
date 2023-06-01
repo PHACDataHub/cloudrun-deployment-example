@@ -23,21 +23,43 @@ steps:
   #   - '-r'
   #   - 'djangoproject/requirements.txt'
     # python3 -m pip uninstall -t . -r djangoproject/requirements.txt
-
-  # Install dependencies
+# Create and activate virtual environment
   - name: 'python:3.9'
-    id: INSTALL
+    id: CREATE_VENV
+    entrypoint: 'python'
+    args: ['-m', 'venv', 'venv']
+
+  - name: 'python:3.9'
+    id: ACTIVATE_VENV
+    entrypoint: 'source'
+    args: ['venv/bin/activate']
+
+# Install dependencies
+  - name: 'python:3.9'
+    id: INSTALL_DEPENDENCIES
     entrypoint: 'pip'
     args: ['install', '-r', 'djangoproject/requirements.txt']
-    # pip install -r djangoproject/requirements.txt
 
-
-  # Run tests
+# Run tests
   - name: 'python:3.9'
-    id: TESTS
+    id: RUN_TESTS
     entrypoint: 'python'
     args: ['djangoproject/manage.py', 'test', 'hello_world']
-  # python djangoproject/manage.py test hello_world
+
+  # # Install dependencies
+  # - name: 'python:3.9'
+  #   id: INSTALL_DEPENDENCIES
+  #   entrypoint: 'pip'
+  #   args: ['install', '-r', 'djangoproject/requirements.txt']
+  #   # pip install -r djangoproject/requirements.txt
+
+
+  # # Run tests
+  # - name: 'python:3.9'
+  #   id: TESTS
+  #   entrypoint: 'python'
+  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
+  # # python djangoproject/manage.py test hello_world
 
 # # Unit tests
 #   - name: python:3.9
