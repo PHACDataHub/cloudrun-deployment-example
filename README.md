@@ -50,12 +50,6 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
    --location=${REGION} \
    --description=${ARTIFACT_REGISTRY_REPO_NAME}
 ```
-<!-- 3. Allow service account to read from the Artifact Registry
-
-~gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
-    --location=${REGION} \
-    --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
-    --role="roles/artifactregistry.reader"~ -->
 
 4. Authorize docker to push images to artifact registry
 
@@ -77,7 +71,7 @@ a. Enable Cloud Build service
 
 b. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
 
-c. Add cloud build trigger
+c. Add cloud build trigger (this is set to be triggered on push to main branch)
 ```$ gcloud builds triggers create github \
   --name=hello-world-deploy-trigger \
   --region ${REGION} \
@@ -92,8 +86,6 @@ c. Add cloud build trigger
 ### 6. Set up Cloud Run 
 * Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
-* Create Service
-~gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated~ (defined in cloudbuild.yaml)
 
 ### 7.Set up Database
 Starting with Postgres per https://cloud.google.com/python/django/run
@@ -147,7 +139,7 @@ echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | h
 
 ### TODO 
 * Database
-* Run tests in CI
+* Run tests in CI (github actions or in cloud build yaml)
 * Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
 * Github actions (or somehting to reflect errors without going into cloud build to see)
 * secret management (https://cloud.google.com/secret-manager/docs/quickstart)
