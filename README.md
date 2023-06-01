@@ -7,13 +7,13 @@ Working towards deploying Django apps to Google Cloud Run using AlloyDB (via aut
 https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 
 ## Steps to deploy
-### Build app
+### 1. Build app
 * Using a django app here as an example
 * Add tests - a key component to reducing breaking changes with continuous deployment
 
 * Set up DNS and add to approved hosts (in settings.py) if using Django
 
-### Containerize 
+### 2. Containerize 
 * Add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
 
 To run locally:
@@ -22,7 +22,7 @@ To run locally:
 
 ```$ docker-compose down ``` to tear down at end
 
-### Authenticate GCP
+### 3. Authenticate GCP
 Login to gcloud and set project
 
 ```$ gcloud auth login```
@@ -38,7 +38,7 @@ export ARTIFACT_REGISTRY_REPO_NAME="hello-world-app" \
 export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
 ```
 
-### Add to Artifact Registry
+### 4. Add Image to Artifact Registry
 1. Enable Artifact Registry
 
 ```$ gcloud services enable artifactregistry.googleapis.com```
@@ -51,12 +51,12 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
    --description=${ARTIFACT_REGISTRY_REPO_NAME}
 ```
 <!-- 3. Allow service account to read from the Artifact Registry
-```
+
 ~gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
     --location=${REGION} \
     --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
     --role="roles/artifactregistry.reader"~ -->
-```
+
 4. Authorize docker to push images to artifact registry
 
 ```$ gcloud auth configure-docker ${REGION}-docker.pkg.dev``` 
@@ -70,8 +70,8 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
 
 *Turn on vunerability scanning in the gui!*
 
-### Set up Cloud Build 
-1. Activate
+### 5. Set up Cloud Build 
+1. Enable Cloud Build service
 
 ```$ gcloud services enable cloudbuild.googleapis.com```
 
@@ -89,15 +89,13 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
   --no-require-approval
   ```
 
-
-
-### Set up Cloud Run 
-* Enable service 
+### 6. Set up Cloud Run 
+* Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
 * Create Service
 ~gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app --region $REGION --allow-unauthenticated~ (defined in cloudbuild.yaml)
 
-### Set up Database
+### 7.Set up Database
 Starting with Postgres per https://cloud.google.com/python/django/run
 * Enable service 
 ``` $ gcloud services enable sqladmin.googleapis.com ```
@@ -111,27 +109,29 @@ gcloud sql instances create hello-world-sql-instance \
     --tier db-f1-micro \
     --region $REGION
 ```
-* create db
+* Create database 
 ```
 gcloud sql databases create hello-world-db \
     --instance hello-world-sql-instance
 ```
-* username and password
+* Set DB username and password
 ```
 gcloud sql users create postgres_username \
     --instance hello-world-sql-instance \
     --password postgres_password
 ```
 
-### Cloud Storage bucket
+### 8. Cloud Storage bucket
+* Make bucket (needed to store .env?)
 gsutil mb -l $REGION gs://$PROJECT_ID_django_bucket
 
-### Secret Manager
+### 9. Secret Manager
 add username and password to bucket as .env
 ```
 echo DATABASE_URL=postgres://postgres_username:postgres_password@//cloudsql/$PROJECT_ID:$REGION:hello-world-sql-instance/hello-world-db > .env
 echo GS_BUCKET_NAME=$PROJECT_ID_django_bucket >> .env
 echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | head -n1) >> .env
+```
 ### AlloyDB
 * Activate (for this we need AlloyDB, Compute Engine, Resource Manager and Service Networking APIs)
 
