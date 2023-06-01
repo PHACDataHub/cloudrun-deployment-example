@@ -51,6 +51,12 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
    --description=${ARTIFACT_REGISTRY_REPO_NAME}
 ```
 
+<!-- c. give service account permission to read from repo
+gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
+    --location=${REGION} \
+    --member=serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com \
+    --role="roles/artifactregistry.reader" -->
+
 4. Authorize docker to push images to artifact registry
 
 ```$ gcloud auth configure-docker ${REGION}-docker.pkg.dev``` 
@@ -86,6 +92,8 @@ c. Add cloud build trigger (this is set to be triggered on push to main branch)
 ### 6. Set up Cloud Run 
 * Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID --member=USER_OR_SERVICE_ACCOUNT_EMAIL --role=roles/run.viewer
 
 ### 7.Set up Database
 Starting with Postgres per https://cloud.google.com/python/django/run
