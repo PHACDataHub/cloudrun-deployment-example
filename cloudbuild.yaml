@@ -101,7 +101,7 @@ steps:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
 
 
-  - id: : "push image artifact registry"
+  - id: "push image artifact registry"
     name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -128,7 +128,7 @@ steps:
         "managed",
         "--allow-unauthenticated",
         "--image",
-        ${_IMAGE}
+        ${_IMAGE},
       ]
     # args:
     #   - "run"
