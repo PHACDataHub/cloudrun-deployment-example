@@ -71,13 +71,13 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
 *Turn on vunerability scanning in the gui!*
 
 ### 5. Set up Cloud Build 
-1. Enable Cloud Build service
+a. Enable Cloud Build service
 
 ```$ gcloud services enable cloudbuild.googleapis.com```
 
-2. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
+b. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
 
-2. Add cloud build trigger
+c. Add cloud build trigger
 ```$ gcloud builds triggers create github \
   --name=hello-world-deploy-trigger \
   --region ${REGION} \
