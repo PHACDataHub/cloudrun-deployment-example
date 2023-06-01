@@ -85,8 +85,8 @@ steps:
 #  or 
 #  flake8 .
 
-# Build the container image
-  - name: "gcr.io/cloud-builders/docker"
+  - id: "build container image"
+    name: "gcr.io/cloud-builders/docker"
     args: [
         "build",
         "-t",
@@ -101,8 +101,8 @@ steps:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
 
 
-# Push the container image to Artifact Registry
-  - name: "gcr.io/cloud-builders/docker"
+  - id: : "push image artifact registry"
+    name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
@@ -112,18 +112,37 @@ steps:
   # $ docker push northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world
 
 
-# Deploy container image to Cloud Run
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+  - id: "deploy container image to cloud run"
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
-      - "run"
-      - "deploy"
-      - "${_SERVICE_NAME}"
-      - "--image"
-      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      - "--region"
-      - "${_REGION}"
-      - "--allow-unauthenticated"
+      [
+        "run",
+        "deploy",
+        "${_SERVICE_NAME}",
+        "--image",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        "--region",
+        "${_REGION}",
+        "--platform", 
+        "managed",
+        "--allow-unauthenticated",
+        "--image",
+        ${_IMAGE}
+      ]
+    # args:
+    #   - "run"
+    #   - "deploy"
+    #   - "${_SERVICE_NAME}"
+    #   - "--image"
+    #   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+    #   - "--region"
+    #   - "${_REGION}"
+    #   - "--platform" 
+    #   - "managed"
+    #   - "--allow-unauthenticated"
+    #   - "--image"
+    #   - ${_IMAGE}
 
       # - --add-cloudsql-instances PROJECT_ID:REGION:INSTANCE_NAME  (for DB)
 # Similar to:
@@ -134,6 +153,7 @@ substitutions:
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
+  _PLATFORM: managed
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
