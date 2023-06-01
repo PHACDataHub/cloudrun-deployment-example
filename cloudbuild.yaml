@@ -124,23 +124,12 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
+        "--add-cloudsql-instances",
+        "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}",
         "--platform", 
         "managed",
         "--allow-unauthenticated",
       ]
-    # args:
-    #   - "run"
-    #   - "deploy"
-    #   - "${_SERVICE_NAME}"
-    #   - "--image"
-    #   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-    #   - "--region"
-    #   - "${_REGION}"
-    #   - "--platform" 
-    #   - "managed"
-    #   - "--allow-unauthenticated"
-    #   - "--image"
-    #   - ${_IMAGE}
 
       # - --add-cloudsql-instances PROJECT_ID:REGION:INSTANCE_NAME  (for DB)
 # Similar to:
@@ -151,11 +140,12 @@ substitutions:
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
-  _PLATFORM: managed
+  _SQL_INSTANCE_NAME: "hello-world-sql-instance"
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
+# service-71366405699@gcp-sa-artifactregistry.iam.gserviceaccount.com
 
 # # connect cloud build with github
 # can do through console
