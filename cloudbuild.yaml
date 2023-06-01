@@ -124,8 +124,8 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
-        "--add-cloudsql-instances",
-        "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}",
+        # "--add-cloudsql-instances",
+        # "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
         "--platform", 
         "managed",
         "--allow-unauthenticated",
@@ -133,7 +133,7 @@ steps:
 
       # - --add-cloudsql-instances PROJECT_ID:REGION:INSTANCE_NAME  (for DB)
 # Similar to:
-#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated
+#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated --add-cloudsql-instances
 
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
