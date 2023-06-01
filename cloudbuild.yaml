@@ -127,8 +127,6 @@ steps:
         "--platform", 
         "managed",
         "--allow-unauthenticated",
-        "--image",
-        "${_IMAGE}"
       ]
     # args:
     #   - "run"
