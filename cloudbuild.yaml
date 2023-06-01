@@ -33,10 +33,10 @@ steps:
 
 
   # Run tests
-  # - name: 'python:3.9'
-  #   entrypoint: 'python'
-  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
-  # # python djangoproject/manage.py test hello_world
+  - name: 'python:3.9'
+    entrypoint: 'python'
+    args: ['djangoproject/manage.py', 'test', 'hello_world']
+  # python djangoproject/manage.py test hello_world
 
 # # Unit tests
 #   - name: python:3.9
