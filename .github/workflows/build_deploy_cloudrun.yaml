@@ -35,7 +35,7 @@ jobs:
 
             # Setup gcloud CLI
             - name: Set up gcloud
-              uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
+              uses: GoogleCloudPlatform/github-actions/setup-gcloud@test-deploy
               with:
                   version: '342.0.0'
                   service_account_email: ${{ secrets.SA_EMAIL }}
