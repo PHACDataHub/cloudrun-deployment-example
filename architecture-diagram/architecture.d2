@@ -1,0 +1,89 @@
+internet: The Internet {
+  icon: ./icons/my_cloud.svg
+  shape: image
+}
+
+Google Cloud: {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  gcpvpc: Google managed Serverless VPC {
+    style: {
+      stroke: blue
+      font-color: blue
+      stroke-dash: 3
+      fill: transparent
+    }
+    cloudRun: Cloud Run {
+      icon: ./icons/cloud_run.svg
+      style: {
+        stroke: "#000000"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  Project: {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    lb: Cloud Load Balancer {
+      icon: ./icons/cloud_load_balancer.svg
+      style: {
+        stroke: "#000000"
+        fill: "#ffffff"
+      }
+    }
+
+    cloudArmor: Cloud Armor {
+      icon: ./icons/cloud_armor.svg
+      style: {
+        stroke: "#000000"
+        fill: "#ffffff"
+      }
+    }
+
+    connector: Serverless VPC Connector {
+      icon: ./icons/serverless_vpc_connector.svg
+      style: {
+        stroke: "#000000"
+        fill: "#ffffff"
+      }
+    }
+
+    firewallRules: Firewall Rules {
+      icon: ./icons/cloud_firewall_rules.svg
+      style: {
+        stroke: "#000000"
+        fill: "#ffffff"
+      }
+    }
+
+    vpc: User managed VPC 10.1.0.0./16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+      alloydb: AlloyDB {
+        icon: ./icons/alloydb.svg
+        style: {
+          stroke: "#000000"
+          fill: "#ffffff"
+        }
+      }
+    }
+  }
+}
+
+internet -> Google Cloud.Project.firewallRules: https
+Google Cloud.Project.firewallRules <-> Google Cloud.Project.lb
+Google Cloud.Project.lb <-> Google Cloud.Project.cloudArmor
+Google Cloud.Project.lb <-> Google Cloud.gcpvpc.cloudRun
+Google Cloud.gcpvpc.cloudRun -> Google Cloud.Project.connector
+Google Cloud.Project.connector -> Google Cloud.Project.vpc.alloydb
