@@ -47,7 +47,7 @@ jobs:
       - name: Check Python version # checking the python version to see if 3.x is installed.
         run: python --version
       - name: Install requirements # install application requirements
-        run: pip install -r requirements.txt
+        run: pip install -r djangoproject/requirements.txt
       - name: Check Syntax # check code formatting
         run: pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
