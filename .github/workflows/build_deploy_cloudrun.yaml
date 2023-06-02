@@ -33,24 +33,26 @@ jobs:
             - name: Checkout code 
               uses: actions/checkout@v2
 
-            # Setup gcloud CLI
+            # # Setup gcloud CLI (this is old from resource above)
+            # - name: Set up gcloud
+            #   uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
             - name: Set up gcloud
-              uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
+              uses: google-github-actions/setup-gcloud@v0.3.0
               with:
                   version: '342.0.0'
                   service_account_email: ${{ secrets.SA_EMAIL }}
                   service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
-            # Configure gcloud CLI
-            - name: gcloud Set up
+            - name: Set project
               run: |
                   gcloud config set project $PROJECT_ID
             # Build and push image to Google Container Registry
             - name: Build
               run: |
-                  gcloud builds submit -tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  \ 
+                  gcloud builds submit \
+                  -tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  \ 
                   --project $PROJECT_ID \
-                  /djangoproject/
+                  djangoproject/.
 
             # Deploy image to Cloud Run
             - name: Deploy
