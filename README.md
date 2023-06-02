@@ -1,5 +1,6 @@
 # Cloudrun Deployment Example
-[![Django CI Workflow](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml&cachebust=2)
+[![CI Workflow - Code check on Pull Request](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml&cachebust=2)
+[![CI/CD Workflow - Deploy to Cloud Run on Push to Main](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/build_deploy_cloudrun.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/build_deploy_cloudrun.yaml.yaml&cachebust=2)
 
 Working towards deploying Django apps to Google Cloud Run using AlloyDB (via auth proxy sidecar) and GitHub Actions.
 
@@ -9,8 +10,8 @@ Working towards deploying Django apps to Google Cloud Run using AlloyDB (via aut
 https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 
 ## Deployment options
-* GitHub Actions to run tests on pull request, then, cloud build trigger will build docker image, push to artifact registry and deploy to cloud build on push to main branch (current way discribed below)
-* Capture the whole CI/CD process with GitHub Actions (now working on)
+1. GitHub Actions to run tests on pull request, then on push to main, a cloud build trigger will run steps to build the docker image, push to image artifact registry and deploy to cloud run (current way discribed below)
+2. Capture the whole CI/CD process with GitHub Actions (now working on)
 
 ## Steps to deploy (with Cloud Build trigger)
 ### 1. Build app
@@ -21,8 +22,9 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 * Set up DNS and add to approved hosts (in settings.py) if using Django
 
 ### 2. Containerize 
-* Add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
+* Add Dockerfile and requirements.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
 
+*TODO Add database image to this file*
 <!-- **Look at using GCP cloud shell or GitHub codespaces if unable to use docker on your machine because of admin privledges**  -->
 
 To run locally:
@@ -162,11 +164,11 @@ echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | h
 -[] Database
 -[] Run tests in CI (github actions or in cloud build yaml)
 -[] Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
--[] Github actions (or somehting to reflect errors without going into cloud build to see)
+-[X] Github actions (or somehting to reflect errors without going into cloud build to see - have writeback into repor set
 -[] secret management (https://cloud.google.com/secret-manager/docs/quickstart)
--[] Learn if pdm or requirements.txt/ venvs are being used for patterns
+-[] Learn if projects are using pdm or requirements.txt/ venvs are being used for patterns
 -[] Automate approved hosts
--[] Dependabot
+-[] Dependabot (autocommit PR with workflow - but also should indicate some versions requirements.txt)
 -[] Add [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install) to docker-compose to run locally a be able to test migrations
 -[] Figure out migrations (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
 

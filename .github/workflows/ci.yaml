@@ -2,26 +2,24 @@
 # Modified from: https://medium.com/intelligentmachines/github-actions-end-to-end-ci-cd-pipeline-for-django-5d48d6f00abf
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python 
 
-# Thoughts - maybe have one to test for pull request, and one with deploy steps for push to main?
-# https://itnext.io/github-actions-ship-code-to-gcp-cloud-run-8d607f34e1cd
 
-name: Django CI Workflow
+name: CI Workflow - on pull request
 # will need to lock down main branch 
+# Don't need to push to GCP 
+# QUESTION - is there a way we can avoid douplicating this?
+
 
 on:
   # opening a pull request to main is the trigger
   pull_request:
-    # types: 
-    #   - opened
+    types: 
+      - opened
     branches:
       - main
 
-  # any code pushed to main will also be a trigger 
-  push:
-    branches:
-      - main
+# This is workflow has 4 steps: code check (which will have been done in ci.yaml on pull request open), 
+#build docker image, push to artifact registry and deploy to cloud run
 
-# 3 jobs - check code, build, push image to docker registry, deploy to cloud run
 jobs:
   health-check-job: # health check job for testing and code formatting check
     runs-on: ubuntu-latest # os for running the job
@@ -61,67 +59,6 @@ jobs:
       - name: Run Test # running tests
         run: python djangoproject/manage.py test
 
-  # package-job: # package job for building and publishing docker images
-  #   runs-on: ubuntu-latest
-  #   needs: [health-check-job] # will be fired if and only if health-check-job is passed.
-  #   if: ${{ github.event_name == 'push' }} # will be fired if the trigger event is a push event.
-  #   steps:
-  #     - name: Checkout Code # checking out code.
-  #       uses: actions/checkout@v2
-  #     - name: Build & Publish Image # we are using a public GitHub Action to build and publish docker image to our GCR registry.
-  #       uses: docker/build-push-action@v1
-  #       env:
-  #         app_name: app
-  #       with:
-  #         username: _json_key # default for gcr.io
-  #         password: ${{ secrets.GKE_PASSWORD }} # service account file to be set as secret
-  #         registry: gcr.io # gcr registry domain
-  #         repository: ${{secrets.GKE_PROJECT}}/github-django-actions/app # GKE_PROJECT is out GCP Project id to be set as secret.
-  #         tag_with_sha: true # this will tag our image with commit id. For example our image our be gcr.io/project-id/github-django-actions/app:sha-7865423 where 7865423 is the short sha of our commit.
-
-  # deploy-job: # deploy job is for deploying our code to google cloud cluster.
-  #   runs-on: ubuntu-latest
-  #   needs: [package-job] # will require package-job to be successful for triggering
-  #   if: ${{ github.event_name == 'push' }} # will be fire if the trigger event is a push event.
-  #   steps:
-  #     - name: Checkout code # checking out code.
-  #       uses: actions/checkout@v2
-  #     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master # settings up gcloud cli in our job machine.
-  #       with:
-  #         version: '270.0.0'
-  #         service_account_email: ${{ secrets.GKE_EMAIL }} # email address of our service account that will be created with storage and kubernetes permissions
-  #         service_account_key: ${{ secrets.GKE_PASSWORD }} # service account file.
-  #     - name: Set Repo Location # steps required to find the image id of our image from contiainer registry
-  #       id: repo
-  #       run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT}}/github-django-actions/app:sha-$(git rev-parse --short HEAD)" # we are setting the image location as output to be used in later step
-  #     - name: Check Repo Location
-  #       run: echo ${{ steps.repo.outputs.repo_name }} # checking our repo location
-  #     - name: Install Helm # helm installation in our runner for deploying.
-  #       run: |
-  #         curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-  #         chmod 700 get_helm.sh
-  #         ./get_helm.sh
-  #     - name: Connect to kubernetes cluster
-  #       run: |
-  #         gcloud container clusters get-credentials ${{secrets.GKE_CLUSTER}} --zone ${{secrets.GKE_ZONE}} --project ${{secrets.GKE_PROJECT}}
-  #     - name: Helm Deploy # deploying our helm chart to our cluster
-  #       run: >
-  #         helm upgrade
-  #         --install
-  #         --set image=${{ steps.repo.outputs.repo_name }}
-  #         --set user=${{ secrets.DB_USER }}
-  #         --set password=${{ secrets.DB_PASSWORD }}
-  #         --set host=${{ secrets.DB_HOST }}
-  #         --set port=${{ secrets.DB_PORT }}
-  #         --set name=${{ secrets.DB_NAME }}
-  #         --wait
-  #         --atomic
-  #         app
-  #         ./k8s
-  #     - name: Check pods # checking pod list to see if they are running.
-  #       run: kubectl get pods
-
-
 # jobs:
 #   build:
 
@@ -147,37 +84,6 @@ jobs:
 #         run: |
 #           pytest
 
-
-
-# name: hello world ci
-
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-
-# jobs:
-#   build:
-#     # runs-on: ubuntu-latest
-#     runs-on: ubuntu-lts
-
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-
-#     - name: Set up Python
-#       uses: actions/setup-python@v2
-#       with:
-#         python-version: 3.9
-
-#     - name: Install dependencies
-#       run: pip install -r requirements.txt
-
-#     - name: Run tests
-#       run: python manage.py test
 
 
 # from https://github.com/marketplace/actions/deploy-to-cloud-run
