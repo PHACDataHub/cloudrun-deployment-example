@@ -1,3 +1,5 @@
 black
 django
 psycopg2-binary
+pycodestyle
+gunicorn

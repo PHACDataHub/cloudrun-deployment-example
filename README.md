@@ -16,6 +16,8 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 ### 2. Containerize 
 * Add Dockerfile and requirement.txt to django project folder, if would like to run locally, create docker-compose.yaml to root.
 
+<!-- **Look at using GCP cloud shell or GitHub codespaces if unable to use docker on your machine because of admin privledges**  -->
+
 To run locally:
 
 ```$ docker-compose up -d ```
@@ -123,13 +125,13 @@ gcloud sql users create postgres_username \
 
 ### 8. Cloud Storage bucket
 * Make bucket (needed to store .env?)
-gsutil mb -l $REGION gs://$PROJECT_ID_django_bucket
+gsutil mb -l $REGION gs://$PROJECT_ID/django_bucket
 
 ### 9. Secret Manager
 add username and password to bucket as .env
 ```
 echo DATABASE_URL=postgres://postgres_username:postgres_password@//cloudsql/$PROJECT_ID:$REGION:hello-world-sql-instance/hello-world-db > .env
-echo GS_BUCKET_NAME=$PROJECT_ID_django_bucket >> .env
+echo GS_BUCKET_NAME=$PROJECT_ID/django_bucket >> .env
 echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | head -n1) >> .env
 ```
 ### AlloyDB
