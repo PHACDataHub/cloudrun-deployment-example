@@ -1,6 +1,6 @@
 # Cloudrun Deployment Example
 <!-- ![Workflow Status](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg) -->
-![Workflow Status](https://img.shields.io/github/workflow/status/PHACDataHub/cloudrun-deployment-example/ci?cachebust=2)
+![Workflow Status](https://img.shields.io/github/workflow/status/PHACDataHub/cloudrun-deployment-example/Django_CI_Workflow?cachebust=2)
 
 Working towards deploying Django apps to Google Cloud Run using AlloyDB (via auth proxy sidecar) and GitHub Actions.
 
