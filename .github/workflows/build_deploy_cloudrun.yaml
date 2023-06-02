@@ -4,7 +4,6 @@
 
 # taken from: https://itnext.io/github-actions-ship-code-to-gcp-cloud-run-8d607f34e1cd
 
-name: Cloud Run Workflow - on push to main branch 
 # will need to lock down main branch 
 # QUESTION - how do we do we integrate migrations with this process?
 # QUESTION - is there a way to avoid douplicating the ci part of this?
