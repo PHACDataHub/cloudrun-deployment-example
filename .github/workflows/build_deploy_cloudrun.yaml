@@ -30,7 +30,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout
+            - name: Checkout code 
               uses: actions/checkout@v2
 
             # Setup gcloud CLI
@@ -48,7 +48,7 @@ jobs:
             # Build and push image to Google Container Registry
             - name: Build
               run: |
-                  gcloud builds submit -tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA \
+                  gcloud builds submit -tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/.\
                   --project $PROJECT_ID
 
             # Deploy image to Cloud Run
