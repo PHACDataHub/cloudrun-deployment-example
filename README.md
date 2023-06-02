@@ -1,6 +1,5 @@
 # Cloudrun Deployment Example
-<!-- ![Workflow Status](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg) -->
-![Workflow Status](https://img.shields.io/github/workflow/status/PHACDataHub/cloudrun-deployment-example/Django_CI_Workflow?cachebust=2)
+[![Django CI Workflow](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml)
 
 Working towards deploying Django apps to Google Cloud Run using AlloyDB (via auth proxy sidecar) and GitHub Actions.
 
@@ -151,15 +150,15 @@ echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | h
 
 
 ### TODO 
-* Database
-* Run tests in CI (github actions or in cloud build yaml)
-* Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
-* Github actions (or somehting to reflect errors without going into cloud build to see)
-* secret management (https://cloud.google.com/secret-manager/docs/quickstart)
-* Learn if pdm or requirements.txt/ venvs are being used for patterns
-* Automate approved hosts
-* Add [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install) to docker-compose to run locally a be able to test migrations
-* Figure out migrations (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
+-[] Database
+-[] Run tests in CI (github actions or in cloud build yaml)
+-[] Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
+-[] Github actions (or somehting to reflect errors without going into cloud build to see)
+-[] secret management (https://cloud.google.com/secret-manager/docs/quickstart)
+-[] Learn if pdm or requirements.txt/ venvs are being used for patterns
+-[] Automate approved hosts
+-[] Add [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install) to docker-compose to run locally a be able to test migrations
+-[] Figure out migrations (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
 
 
 #### Run tests (locally)
