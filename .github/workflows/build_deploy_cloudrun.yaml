@@ -14,7 +14,7 @@ name: Build and Deploy to Cloud Run
 on:
     push:
         branches:
-            - test-deploy
+            - main
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -35,7 +35,7 @@ jobs:
 
             # Setup gcloud CLI
             - name: Set up gcloud
-              uses: GoogleCloudPlatform/github-actions/setup-gcloud@test-deploy
+              uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
               with:
                   version: '342.0.0'
                   service_account_email: ${{ secrets.SA_EMAIL }}
