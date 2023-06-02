@@ -166,6 +166,7 @@ echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | h
 -[] secret management (https://cloud.google.com/secret-manager/docs/quickstart)
 -[] Learn if pdm or requirements.txt/ venvs are being used for patterns
 -[] Automate approved hosts
+-[] Dependabot
 -[] Add [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install) to docker-compose to run locally a be able to test migrations
 -[] Figure out migrations (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
 
