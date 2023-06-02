@@ -1,21 +1,27 @@
 
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python  and
-# https://medium.com/intelligentmachines/github-actions-end-to-end-ci-cd-pipeline-for-django-5d48d6f00abf
+# Modified from: https://medium.com/intelligentmachines/github-actions-end-to-end-ci-cd-pipeline-for-django-5d48d6f00abf
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python 
 
-name: Django_CI_Workflow
+# Thoughts - maybe have one to test for pull request, and one with deploy steps for push to main?
+# https://itnext.io/github-actions-ship-code-to-gcp-cloud-run-8d607f34e1cd
+
+name: Django CI Workflow
 # will need to lock down main branch 
 
 on:
   # opening a pull request to main is the trigger
   pull_request:
+    # types: 
+    #   - opened
     branches:
       - main
+
   # any code pushed to main will also be a trigger 
   push:
     branches:
       - main
 
-# three job definition
+# 3 jobs - check code, build, push image to docker registry, deploy to cloud run
 jobs:
   health-check-job: # health check job for testing and code formatting check
     runs-on: ubuntu-latest # os for running the job

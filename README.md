@@ -5,13 +5,18 @@ Working towards deploying Django apps to Google Cloud Run using AlloyDB (via aut
 
 *Work in progress - determining a workflow using a hello-world app and postgres-like db, then will apply to a more applicable projects*
 
-## Currently running on 
+## Currently running on
 https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 
-## Steps to deploy
+## Deployment options
+* GitHub Actions to run tests on pull request, then, cloud build trigger will build docker image, push to artifact registry and deploy to cloud build on push to main branch (current way discribed below)
+* Capture the whole CI/CD process with GitHub Actions (now working on)
+
+## Steps to deploy (with Cloud Build trigger)
 ### 1. Build app
 * Using a django app here as an example
 * Add tests - a key component to reducing breaking changes with continuous deployment
+<!-- * Add githubs workflow file  -->
 
 * Set up DNS and add to approved hosts (in settings.py) if using Django
 
@@ -27,6 +32,8 @@ To run locally:
 ```$ docker-compose down ``` to tear down at end
 
 ### 3. Authenticate GCP
+For the following steps you'll need the [gcloud](https://cloud.google.com/sdk/docs/install) and [gsutil](https://cloud.google.com/storage/docs/gsutil_install) clis. 
+
 Login to gcloud and set project
 
 ```$ gcloud auth login```
@@ -120,12 +127,14 @@ gcloud sql databases create hello-world-db \
 ```
 * Set DB username and password
 ```
-gcloud sql users create postgres_username \
+gcloud sql users create postgres_user \
     --instance hello-world-sql-instance \
     --password postgres_password
 ```
 
 ### 8. Cloud Storage bucket
+<!-- * Enable google cloud storage
+gcloud enable storage-component.googleapis.com storage-api.googleapis.com storage.googleapis.com  -->
 * Make bucket (needed to store .env?)
 gsutil mb -l $REGION gs://$PROJECT_ID/django_bucket
 

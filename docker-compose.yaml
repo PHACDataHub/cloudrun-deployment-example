@@ -1,4 +1,4 @@
-# For local use, use cloudbuild.yaml for pushing to artifact registry and deploying with cloud build
+# For local use this, to push to artifact registry and deploying with cloud build, use cloudbuild.yaml. 
 version: '1'
 services:
   web:
