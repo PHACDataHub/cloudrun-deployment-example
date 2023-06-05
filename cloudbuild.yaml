@@ -98,7 +98,7 @@ steps:
     # waitFor:
     # - RUN-UNIT-TESTS
   # This is ~ as:
-  #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
+  #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
 
 
   - id: "push image artifact registry"
@@ -109,7 +109,7 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
   # This is the ~ to:
-  # $ docker push northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world
+  # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
 
   - id: "deploy container image to cloud run"
@@ -133,7 +133,7 @@ steps:
 
       # - --add-cloudsql-instances PROJECT_ID:REGION:INSTANCE_NAME  (for DB)
 # Similar to:
-#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated --add-cloudsql-instances
+#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated --add-cloudsql-instances
 
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
