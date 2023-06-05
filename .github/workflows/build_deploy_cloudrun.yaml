@@ -63,21 +63,22 @@ jobs:
         - name: Build
           run: |
               # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
-              docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
+              # docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
+              # gcloud builds submit --region=northamerica-northeast1 --tag northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$COMMIT_SHA djangoproject/.
+              gcloud builds submit --region=northamerica-northeast1 --config cloudbuild.yaml
+        # - name: Push 
+        #   run: |
+        #       # docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA 
+        #       docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
         
-        - name: Push 
-          run: |
-              # docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA 
-              docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
-        
-        # Deploy image to Cloud Run
-        - name: Deploy
-          run: |
-              gcloud run deploy $SERVICE_NAME \
-                --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world \
-                --region northamerica-northeast1 \
-                --allow-unauthenticated \
-                --platform managed
+        # # Deploy image to Cloud Run
+        # - name: Deploy
+        #   run: |
+        #       gcloud run deploy $SERVICE_NAME \
+        #         --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$COMMIT_SHA \
+        #         --region northamerica-northeast1 \
+        #         --allow-unauthenticated \
+        #         --platform managed
 
 
 # on:
