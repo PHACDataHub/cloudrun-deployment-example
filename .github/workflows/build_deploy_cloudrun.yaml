@@ -78,7 +78,6 @@ jobs:
                 --allow-unauthenticated \
                 --platform managed
 
-
 # on:
 #   # any code pushed to main will also be a trigger 
 #   push:
