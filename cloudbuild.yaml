@@ -140,7 +140,7 @@ substitutions:
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
-  _SQL_INSTANCE_NAME: "hello-world-sql-instance"
+  # _SQL_INSTANCE_NAME: "hello-world-sql-instance"
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
