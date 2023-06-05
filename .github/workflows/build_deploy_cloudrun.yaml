@@ -2,15 +2,14 @@
 # Modified from: https://medium.com/intelligentmachines/github-actions-end-to-end-ci-cd-pipeline-for-django-5d48d6f00abf
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python 
 
-# taken from: https://itnext.io/github-actions-ship-code-to-gcp-cloud-run-8d607f34e1cd
+# taken from: https://itnext.io/github-actions-ship-code-to-gcp-cloud-run-8d607f34e1cd (update depreciated now using )
+        # https://github.com/google-github-actions/setup-gcloud#authorization
+        # https://cloud.google.com/iam/docs/workload-identity-federation
 
 # will need to lock down main branch 
 # QUESTION - how do we do we integrate migrations with this process?
 # QUESTION - is there a way to avoid douplicating the ci part of this?
   # * can reuse! https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
-
-#   Warning: "service_account_key" has been deprecated. Please switch to using google-github-actions/auth which supports both Workload Identity Federation and Service Account Key JSON authentication. For more details, see https://github.com/google-github-actions/setup-gcloud#authorization
-# Error: google-github-actions/setup-gcloud failed with: The process '/opt/hostedtoolcache/gcloud/342.0.0/x64/bin/gcloud' failed with exit code 1
 
 name: Build and Deploy to Cloud Run
 
@@ -40,16 +39,7 @@ jobs:
         - name: Checkout code 
           uses: actions/checkout@v2
 
-# # https://github.com/google-github-actions/setup-gcloud#authorization
-#             - name: Authenticate with Google Cloud
-#               uses: google-github-actions/auth@v0.5.0
-#               with:
-#                 credentials: ${{ secrets.GCLOUD_AUTH }}
-
-        # https://github.com/google-github-actions/setup-gcloud#authorization
-        # https://cloud.google.com/iam/docs/workload-identity-federation
-        
-        - id: 'Authenticate with Google Cloud
+        - id: 'Authenticate with Google Cloud'
           uses: 'google-github-actions/auth@v1'
           with:
             credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
