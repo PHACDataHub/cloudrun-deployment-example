@@ -76,8 +76,8 @@ jobs:
         # Build and push image to Google Container Registry (https://cloud.google.com/build/docs/build-push-docker-image)
         - name: Build
           run: |
-              gcloud builds submit djangoproject/. --tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  --project $PROJECT_ID 
-              
+              # gcloud builds submit --tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
+              docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
         # Deploy image to Cloud Run
         - name: Deploy
           run: |
