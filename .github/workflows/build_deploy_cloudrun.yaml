@@ -42,9 +42,9 @@ jobs:
         - id: 'auth'
           uses: 'google-github-actions/auth@v1'
           with:
-            credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
-            # workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-            # service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+            # credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+            workload_identity_provider: 'projects/294163875507/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
+            service_account: 'github-action@pdcp-cloud-014-lilakelland.iam.gserviceaccount.com'
 
         - name: 'Set up Cloud SDK'
           uses: 'google-github-actions/setup-gcloud@v1'
@@ -73,11 +73,15 @@ jobs:
         - name: Set project
           run: |
               gcloud config set project $PROJECT_ID
+
         # Build and push image to Google Container Registry (https://cloud.google.com/build/docs/build-push-docker-image)
         - name: Build
           run: |
-              # gcloud builds submit --tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
+              # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
               docker build  -t  northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world djangoproject/.
+        
+        
+        
         # Deploy image to Cloud Run
         - name: Deploy
           run: |
