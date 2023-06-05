@@ -68,7 +68,7 @@ jobs:
         - name: Push 
           run: |
               # docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA 
-              docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:latest 
+              docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
         
         # Deploy image to Cloud Run
         - name: Deploy
