@@ -77,10 +77,10 @@ jobs:
         - name: Build
           run: |
               gcloud builds submit \
+              djangoproject/. \
               --tag northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  \ 
-              --project $PROJECT_ID \
-              djangoproject/.
-
+              # --project $PROJECT_ID \
+              
         # Deploy image to Cloud Run
         - name: Deploy
           run: |
