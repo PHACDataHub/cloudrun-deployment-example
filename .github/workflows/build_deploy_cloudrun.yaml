@@ -65,7 +65,7 @@ jobs:
               # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
               # docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
               # gcloud builds submit --region=northamerica-northeast1 --tag northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$COMMIT_SHA djangoproject/.
-              gcloud builds submit --region=northamerica-northeast1 --config  ../../cloudbuild.yaml
+              gcloud builds submit --region=northamerica-northeast1 --config cloudbuild.yaml
         # - name: Push 
         #   run: |
         #       # docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA 
