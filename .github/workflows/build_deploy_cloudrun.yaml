@@ -39,7 +39,7 @@ jobs:
         - name: Checkout code 
           uses: actions/checkout@v2
 
-        - id: 'Authenticate with Google Cloud'
+        - id: 'auth'
           uses: 'google-github-actions/auth@v1'
           with:
             credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
