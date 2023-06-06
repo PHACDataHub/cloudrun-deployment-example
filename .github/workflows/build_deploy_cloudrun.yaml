@@ -43,7 +43,7 @@ jobs:
           with:
             # workload_identity_provider: 'projects/294163875507/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
             # service_account: 'github-action@pdcp-cloud-014-lilakelland.iam.gserviceaccount.com'
-            workload_identity_provider: 'projects/phx-01h1yptgmche7jcy01wzzpw2rf/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
+            workload_identity_provider: 'projects/249044526600/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
             service_account: 'github-actions@phx-01h1yptgmche7jcy01wzzpw2rf.iam.gserviceaccount.com'
 
         - name: 'Set up Cloud SDK'
