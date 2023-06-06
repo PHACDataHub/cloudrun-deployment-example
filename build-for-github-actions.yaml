@@ -4,7 +4,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     # args: ['build', '-t', '--build-arg', 'COMMIT_SHA=<github_commit_sha>', 'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA}', 'djangoproject/.']
-    args: ['build', '-t', '--build-arg', 'COMMIT_SHA=<github_commit_sha>', 'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA}', 'djangoproject/.']
+    args: ['build', '-t',  'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA}', 'djangoproject/.']
 
 
   - id: "push image artifact registry"
@@ -14,7 +14,7 @@ steps:
         "push",
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
-      
+
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
