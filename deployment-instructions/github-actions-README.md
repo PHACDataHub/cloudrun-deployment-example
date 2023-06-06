@@ -1,5 +1,8 @@
 *need to clean up*
 
+## Deploy using https://github.com/google-github-actions/deploy-cloudrun
+QUESTION - should we pull out and docker build outside?
+
 ### Authenticate GCP
 For the following steps you'll need the [gcloud](https://cloud.google.com/sdk/docs/install) (and maybe [gsutil](https://cloud.google.com/storage/docs/gsutil_install)) clis installed. 
 
@@ -36,6 +39,7 @@ servicenetworking.googleapis.com \
 iam.googleapis.com
 ```
 (IAM - IAM Service Account Credentials AP - for impersonating Creates short-lived credentials for impersonating IAM service accounts)
+Both the Cloud Run Admin and Service Account User roles for cloud run 
 
 ### Create Artifact Registry repo 
 ``` 

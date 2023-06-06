@@ -1,9 +1,10 @@
 # cloudbuild.yaml  For trigger from within cloud build
 # This has 3 steps (build image, push to artifact registry and deploy to cloudrun) and triggered on push to main branch
 
-# # Mostly from 
+# # Taken from 
   # https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml &
   # https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
+
 # # Other referencs:
   # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
   #  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
@@ -118,7 +119,7 @@ steps:
       [
         "run",
         "deploy",
-        "${_SERVICE_NAME}",
+        "${_CLOUD_RUN_SERVICE_NAME}",
         "--image",
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
@@ -138,6 +139,7 @@ substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME: "hello-world"
+  _CLOUD_RUN_SERVICE_NAME: "hello-world-from-cloud-build-trigger"
   _REGION: "northamerica-northeast1"
   # _SQL_INSTANCE_NAME: "hello-world-sql-instance"
 

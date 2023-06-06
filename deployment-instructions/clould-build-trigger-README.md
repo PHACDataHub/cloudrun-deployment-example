@@ -62,17 +62,32 @@ d. Add cloud build trigger (this is set to be triggered on push to main branch)
 * Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
 
-* Give cloud build service account permissions to deploy to cloud run 
+* Create the service 
+
+<!-- * Give cloud build service account permissions to deploy to cloud run 
 ```
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:service-249044526600@gcp-sa-cloudbuild.iam.gserviceaccount.com \
+  --member=serviceAccount:service-294163875507@gcp-sa-cloudbuild.iam.gserviceaccount.com \
   --role=roles/run.viewer
 ```
 gcloud iam service-accounts add-iam-policy-binding \
-  249044526600-compute@developer.gserviceaccount.com \
-  --member="serviceAccount:249044526600@cloudbuild.gserviceaccount.com" \
+  294163875507-compute@developer.gserviceaccount.com \
+  --member="serviceAccount:294163875507@cloudbuild.gserviceaccount.com" \
   --role="roles/iam.serviceAccountUser"  
 
-  This didn't work... but from [here](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#:~:text=gcloud%20iam%20service%2Daccounts%20add%2Diam%2Dpolicy%2Dbinding%20%5C%0A%C2%A0%20294163875507%2Dcompute%40developer.gserviceaccount.com%20%5C%0A%C2%A0%20%2D%2Dmember%3D%22serviceAccount%3A294163875507%40cloudbuild.gserviceaccount.com%22%20%5C%0A%C2%A0%20%2D%2Drole%3D%22roles/iam.serviceAccountUser%22)
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:service-294163875507@gcp-sa-cloudbuild.iam.gserviceaccount.com \
+  --role=roles/run.viewer
+
+  This didn't work... but from [here](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#:~:text=gcloud%20iam%20service%2Daccounts%20add%2Diam%2Dpolicy%2Dbinding%20%5C%0A%C2%A0%20294163875507%2Dcompute%40developer.gserviceaccount.com%20%5C%0A%C2%A0%20%2D%2Dmember%3D%22serviceAccount%3A294163875507%40cloudbuild.gserviceaccount.com%22%20%5C%0A%C2%A0%20%2D%2Drole%3D%22roles/iam.serviceAccountUser%22) -->
 
   * replace with project number
+294163875507
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
+  --role=roles/run.admin
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
+  --role=roles/iam.serviceAccountUser
