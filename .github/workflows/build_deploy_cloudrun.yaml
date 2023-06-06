@@ -17,9 +17,10 @@ on:
         branches:
             - main
 
-# Environment variables available to all jobs and steps in this workflow
+# Environment variables 
 env:
-    PROJECT_ID: pdcp-cloud-014-lilakelland
+    # PROJECT_ID: pdcp-cloud-014-lilakelland
+    PROJECT_ID: phx-01h1yptgmche7jcy01wzzpw2rf
     REGION: northamerica-northeast1
     ARTIFACT_REGISTRY_REPO: hello-world-app
     SERVICE_NAME: hello-world
@@ -40,8 +41,10 @@ jobs:
         - id: 'auth'
           uses: 'google-github-actions/auth@v1'
           with:
-            workload_identity_provider: 'projects/294163875507/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
-            service_account: 'github-action@pdcp-cloud-014-lilakelland.iam.gserviceaccount.com'
+            # workload_identity_provider: 'projects/294163875507/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
+            # service_account: 'github-action@pdcp-cloud-014-lilakelland.iam.gserviceaccount.com'
+            workload_identity_provider: 'projects/$PROJECT_ID/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
+            service_account: 'github-actions@$PROJECT_ID.iam.gserviceaccount.com'
 
         - name: 'Set up Cloud SDK'
           uses: 'google-github-actions/setup-gcloud@v1'
@@ -55,10 +58,6 @@ jobs:
         - name: Set project
           run: |
               gcloud config set project $PROJECT_ID
-
-        - name: Another step
-          run: |
-            echo "Sha: ${{ github.sha }}"
 
         # Build and push image to Google Container Registry (https://cloud.google.com/build/docs/build-push-docker-image)
         - name: Build & Deploy
