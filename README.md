@@ -7,7 +7,7 @@ Working towards deploying Django apps to Google Cloud Run using AlloyDB (via aut
 *Work in progress - determining a workflow using a hello-world app and postgres-like db, then will apply to a more applicable projects*
 
 ## Currently running on
-https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
+https://hello-world-vlfae7w5dq-nn.a.run.app/hello/
 
 ## Deployment options
 1. GitHub Actions to run tests on pull request, then on push to main, a cloud build trigger will run steps to build the docker image, push to image artifact registry and deploy to cloud run (working currently)

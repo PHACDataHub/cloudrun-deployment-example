@@ -25,12 +25,17 @@ Artifact registry to store container image used by cloud run
 gcloud services enable \
 artifactregistry.googleapis.com \
 storage-component.googleapis.com \
-storage-api.googleapis.com storage.googleapis.com \
+storage-api.googleapis.com \
+storage.googleapis.com \
 cloudbuild.googleapis.com \
 run.googleapis.com \
-enable alloydb.googleapis.com compute.googleapis.com cloudresourcemanager.googleapis.com servicenetworking.googleapis.com
+alloydb.googleapis.com \
+compute.googleapis.com \
+cloudresourcemanager.googleapis.com \
+servicenetworking.googleapis.com \
+iam.googleapis.com
 ```
- **IAM Service Account Credentials API**
+(IAM - IAM Service Account Credentials AP - for impersonating Creates short-lived credentials for impersonating IAM service accounts)
 
 ### Create Artifact Registry repo 
 ``` 

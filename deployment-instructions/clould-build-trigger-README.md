@@ -62,4 +62,15 @@ d. Add cloud build trigger (this is set to be triggered on push to main branch)
 * Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
 
-    gcloud projects add-iam-policy-binding $PROJECT_ID --member=USER_OR_SERVICE_ACCOUNT_EMAIL --role=roles/run.viewer
+* Give cloud build service account permissions to deploy to cloud run 
+```
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:service-249044526600@gcp-sa-cloudbuild.iam.gserviceaccount.com \
+  --role=roles/run.viewer
+```
+gcloud iam service-accounts add-iam-policy-binding \
+  249044526600-compute@developer.gserviceaccount.com \
+  --member="serviceAccount:249044526600@cloudbuild.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountUser"
+
+  * replace with project number
