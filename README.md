@@ -24,6 +24,7 @@ https://hello-world-app-65z3ddbfoa-nn.a.run.app/hello/
 -[] Dependabot (autocommit PR with workflow - but also should indicate some versions requirements.txt)
 -[] Add [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install) to docker-compose to run locally a be able to test migrations
 -[] Figure out migrations (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
+-[] Look at https://cloud.google.com/workflows/docs/deploy-workflows-using-cloud-build
 
 
 #### Run tests (locally)
