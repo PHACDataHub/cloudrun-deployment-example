@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '0.0.0.0', 
     'hello-world-65z3ddbfoa-nn.a.run.app',
     'hello-world-vlfae7w5dq-nn.a.run.app',
-    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/'
+    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app'
     ]
 
 
