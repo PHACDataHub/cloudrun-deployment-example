@@ -57,19 +57,19 @@ jobs:
               gcloud config set project $PROJECT_ID
 
         # Build and push image to Google Container Registry (https://cloud.google.com/build/docs/build-push-docker-image)
-        - name: Build
+        - name: Build & Deploy
           run: |
               # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. # (had issues with tag with this one - could it be too long?)
               gcloud builds submit --region=northamerica-northeast1 --config build-for-github-actions.yaml
         
-        # Deploy image to Cloud Run
-        - name: Deploy
-          run: |
-              gcloud run deploy $SERVICE_NAME \
-                --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA} \
-                --region northamerica-northeast1 \
-                --allow-unauthenticated \
-                --platform managed
+        # # Deploy image to Cloud Run
+        # - name: Deploy
+        #   run: |
+        #       gcloud run deploy $SERVICE_NAME \
+        #         --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA} \
+        #         --region northamerica-northeast1 \
+        #         --allow-unauthenticated \
+        #         --platform managed
 
 
 # on:

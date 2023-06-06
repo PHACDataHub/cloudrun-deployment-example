@@ -5,5 +5,30 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA}', 'djangoproject/.']
 
+  - id: "deploy container image to cloud run"
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "${_SERVICE_NAME}",
+        "--image",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        "--region",
+        "${_REGION}",
+        # "--add-cloudsql-instances",
+        # "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+        "--platform", 
+        "managed",
+        "--allow-unauthenticated",
+      ]
+
+substitutions:
+  # The must start with a "_" (_[A-Z0-9_]+)
+  _ARTIFACT_REGISTRY_REPO: "hello-world-app"
+  _SERVICE_NAME: "hello-world"
+  _REGION: "northamerica-northeast1"
+
 images:
   - "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:${COMMIT_SHA}"
