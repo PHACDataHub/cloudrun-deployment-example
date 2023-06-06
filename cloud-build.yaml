@@ -8,8 +8,8 @@ steps:
 # - 'us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world', 'djangoproject/.']
+    args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world', 'djangoproject/.']
   # - name: 'gcr.io/cloud-builders/docker'
   #   args: ['push', 'northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world']
 images:
-  - "northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world"
+  - "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world"
