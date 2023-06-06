@@ -1,0 +1,9 @@
+# This is NOT for cloudbuild trigger, but for github actions...
+
+steps:
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world', 'djangoproject/.']
+
+images:
+  - "northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world"

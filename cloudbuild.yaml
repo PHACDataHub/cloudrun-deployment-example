@@ -1,14 +1,12 @@
-# cloudbuild.yaml
+# cloudbuild.yaml  For trigger from within cloud build
+# This has 3 steps (build image, push to artifact registry and deploy to cloudrun) and triggered on push to main branch
 
-# # Modified from 
+# # Mostly from 
   # https://github.com/daneroo/phac-garden/blob/main/apps/site-nginx/cloudbuild.yaml
 # # Other referencs:
   # https://cloud.google.com/artifact-registry/docs/configure-cloud-build
   #  https://kevinsimper.medium.com/building-docker-images-with-docker-compose-on-google-cloud-container-builder-292b1eb3fd31
   # https://medium.com/kunder/how-to-integrate-github-checks-with-google-cloud-build-and-python-tests-5fd05c4f3dff
-
-# This has 3 steps and set up in Cloud Build (console) to trigger on push to main branch
-
 
 steps:
   # - name: python:3.9
@@ -145,10 +143,4 @@ substitutions:
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
 
-# service-71366405699@gcp-sa-artifactregistry.iam.gserviceaccount.com
-
-# # connect cloud build with github
-# can do through console
-
-# # cloud build trigger creation
 

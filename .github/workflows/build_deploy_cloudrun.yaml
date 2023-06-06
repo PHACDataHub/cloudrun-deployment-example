@@ -8,8 +8,7 @@
 
 # will need to lock down main branch 
 # QUESTION - how do we do we integrate migrations with this process?
-# QUESTION - is there a way to avoid douplicating the ci part of this?
-  # * can reuse! https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
+# TODO reuse CI yaml portion https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions
 
 name: Build and Deploy to Cloud Run
 
@@ -20,7 +19,6 @@ on:
 
 # Environment variables available to all jobs and steps in this workflow
 env:
-    # PROJECT_ID: ${{ secrets.PROJECT_ID }}
     PROJECT_ID: pdcp-cloud-014-lilakelland
     REGION: northamerica-northeast1
     ARTIFACT_REGISTRY_REPO: hello-world-app
@@ -42,7 +40,6 @@ jobs:
         - id: 'auth'
           uses: 'google-github-actions/auth@v1'
           with:
-            # credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
             workload_identity_provider: 'projects/294163875507/locations/global/workloadIdentityPools/github-wif-pool/providers/githubwif'
             service_account: 'github-action@pdcp-cloud-014-lilakelland.iam.gserviceaccount.com'
 
@@ -62,16 +59,8 @@ jobs:
         # Build and push image to Google Container Registry (https://cloud.google.com/build/docs/build-push-docker-image)
         - name: Build
           run: |
-              # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/phx-hellodjango/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. 
-              # docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
-              # gcloud builds submit --region=northamerica-northeast1 --tag northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$COMMIT_SHA djangoproject/.
-              gcloud builds submit --region=northamerica-northeast1 --config cloud-build.yaml
-
-
-        # - name: Push 
-        #   run: |
-        #       # docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA 
-        #       docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
+              # gcloud builds submit -t northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:$GITHUB_SHA  djangoproject/. # (had issues with tag with this one - could it be too long?)
+              gcloud builds submit --region=northamerica-northeast1 --config build-for-github-actions.yaml
         
         # Deploy image to Cloud Run
         - name: Deploy
