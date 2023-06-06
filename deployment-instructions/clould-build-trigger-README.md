@@ -1,6 +1,5 @@
 *need to clean up*
 
-
 ### 4. Add Image to Artifact Registry
 1. Enable Artifact Registry
 
@@ -13,7 +12,6 @@ gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO_NAME} \
    --location=${REGION} \
    --description=${ARTIFACT_REGISTRY_REPO_NAME}
 ```
-
 
 <!-- c. give service account permission to read from repo
 gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NAME} \
@@ -62,32 +60,20 @@ d. Add cloud build trigger (this is set to be triggered on push to main branch)
 * Enable Cloud Run Service 
     ```$ gcloud services enable run.googleapis.com ```
 
-* Create the service 
+* Bind permissions for cloud build to push to cloud run 
+** change out project number 
+```  gcloud projects describe PROJECT_ID --format="value(projectNumber)" ```
 
-<!-- * Give cloud build service account permissions to deploy to cloud run 
 ```
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:service-294163875507@gcp-sa-cloudbuild.iam.gserviceaccount.com \
-  --role=roles/run.viewer
-```
-gcloud iam service-accounts add-iam-policy-binding \
-  294163875507-compute@developer.gserviceaccount.com \
-  --member="serviceAccount:294163875507@cloudbuild.gserviceaccount.com" \
-  --role="roles/iam.serviceAccountUser"  
-
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:service-294163875507@gcp-sa-cloudbuild.iam.gserviceaccount.com \
-  --role=roles/run.viewer
-
-  This didn't work... but from [here](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#:~:text=gcloud%20iam%20service%2Daccounts%20add%2Diam%2Dpolicy%2Dbinding%20%5C%0A%C2%A0%20294163875507%2Dcompute%40developer.gserviceaccount.com%20%5C%0A%C2%A0%20%2D%2Dmember%3D%22serviceAccount%3A294163875507%40cloudbuild.gserviceaccount.com%22%20%5C%0A%C2%A0%20%2D%2Drole%3D%22roles/iam.serviceAccountUser%22) -->
-
-  * replace with project number
-294163875507
-
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
   --role=roles/run.admin
+```
 
+```
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
   --role=roles/iam.serviceAccountUser
+```
+
+### 7. Get url and add to allowed hosts in [settings.py](../djangoproject/djangoproject/settings.py)
