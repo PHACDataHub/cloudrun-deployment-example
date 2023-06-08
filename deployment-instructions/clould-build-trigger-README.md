@@ -41,7 +41,7 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 ```$ gcloud services enable cloudbuild.googleapis.com sourcerepo.googleapis.com```
 
 
-2. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
+2. Add [cloudbuild.yaml](djangoproject/cloudbuild.yaml) file, to the Django project folder, to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
 
 3. Connect repo with cloud build (doesn't appear to be gcloud option to do this)
 https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github?generation=1st-gen
@@ -55,11 +55,11 @@ gcloud builds triggers create github \
   --repo-name=cloudrun-deployment-example \
   --repo-owner=PHACDataHub \
   --branch-pattern="^main$" \
-  --build-config=cloudbuild.yaml \
+  --build-config=djangoproject/cloudbuild.yaml \
   --include-logs-with-status \
   --no-require-approval
   ```
-TODO try --include-logs-with-status--without-any-passwords (to make sure not writing any passwords back to GitHub repo)
+  
 ### iii. Set up Cloud Run 
 * Enable Cloud Run Service 
     ```
