@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '0.0.0.0', 
+    '127.0.0.1',
     'hello-world-65z3ddbfoa-nn.a.run.app',
     'hello-world-vlfae7w5dq-nn.a.run.app',
     'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app'
@@ -87,6 +92,28 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+#         "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+#         "USER": os.environ.get("SQL_USER", "user"),
+#         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+#         "HOST": os.environ.get("SQL_HOST", "localhost"),
+#         "PORT": os.environ.get("SQL_PORT", "5432"),
+#     }
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'dbtest', 
+#         'USER': 'postgres',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost', 
+#         'PORT': '5432',
+#     }
+# }
+
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {

@@ -1,6 +1,7 @@
-*need to clean up*
+## Deploy using [Cloud Build Trigger](https://cloud.google.com/sdk/gcloud/reference/beta/builds/triggers/create/github)
+*Start with steps 1-4 outlined in [deployment-instructions/README.md](README.md)*
 
-### 4. Add Image to Artifact Registry
+### i. Artifact Registry
 1. Enable Artifact Registry
 
 ```$ gcloud services enable artifactregistry.googleapis.com```
@@ -21,7 +22,9 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 
 4. Authorize docker to push images to artifact registry
 
-```$ gcloud auth configure-docker ${REGION}-docker.pkg.dev``` 
+```
+  $ gcloud auth configure-docker ${REGION}-docker.pkg.dev
+  ``` 
 
 <!-- *not sure if we need to do this if deploying through cloud build triggers* -->
 <!-- * Authorize docker to push images to artifact registry 
@@ -32,20 +35,21 @@ gcloud artifacts repositories add-iam-policy-binding ${ARTIFACT_REGISTRY_REPO_NA
 
 *Turn on vunerability scanning in the gui!*
 
-### 5. Set up Cloud Build  (https://cloud.google.com/sdk/gcloud/reference/beta/builds/triggers/create/github)
-a. Enable Cloud Build service and source repo
+### ii. Set up Cloud Build  (https://cloud.google.com/sdk/gcloud/reference/beta/builds/triggers/create/github)
+1. Enable Cloud Build service and source repo
 
 ```$ gcloud services enable cloudbuild.googleapis.com sourcerepo.googleapis.com```
 
 
-b. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
+2. Add [cloudbuild.yaml](cloudbuild.yaml) file to GitHub repository to indicate steps to deployment when triggered (test, lint, build Docker image, push to Artifact Registry, run on cloud Run)
 
-c. connect repo with cloud build (doesn't appear to be gcloud option to do this)
+3. Connect repo with cloud build (doesn't appear to be gcloud option to do this)
 https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github?generation=1st-gen
 
 
-d. Add cloud build trigger (this is set to be triggered on push to main branch)
-```$ gcloud builds triggers create github \
+4. Add cloud build trigger (this is set to be triggered on push to main branch)
+```
+gcloud builds triggers create github \
   --name=hello-world-deploy-trigger \
   --region ${REGION} \
   --repo-name=cloudrun-deployment-example \
@@ -55,25 +59,28 @@ d. Add cloud build trigger (this is set to be triggered on push to main branch)
   --include-logs-with-status \
   --no-require-approval
   ```
-
-### 6. Set up Cloud Run 
+TODO try --include-logs-with-status--without-any-passwords (to make sure not writing any passwords back to GitHub repo)
+### iii. Set up Cloud Run 
 * Enable Cloud Run Service 
-    ```$ gcloud services enable run.googleapis.com ```
+    ```
+    $ gcloud services enable run.googleapis.com
+     ```
 
 * Bind permissions for cloud build to push to cloud run 
 ** change out project number 
-```  gcloud projects describe PROJECT_ID --format="value(projectNumber)" ```
+  ```
+  gcloud projects describe PROJECT_ID --format="value(projectNumber)" 
+  ```
 
-```
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
-  --role=roles/run.admin
-```
+  ```
+  gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
+    --role=roles/run.admin
+  ```
 
-```
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
-  --role=roles/iam.serviceAccountUser
-```
+  ```
+  gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:249044526600@cloudbuild.gserviceaccount.com \
+    --role=roles/iam.serviceAccountUser
+  ```
 
-### 7. Get url and add to allowed hosts in [settings.py](../djangoproject/djangoproject/settings.py)
