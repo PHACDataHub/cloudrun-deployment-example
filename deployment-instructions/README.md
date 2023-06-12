@@ -52,6 +52,14 @@ $ gcloud config set project $PROJECT_ID
 ### 6. Update Allowed Hosts 
 * Get url from Cloud Run UI and then add to allowed hosts in [settings.py](../djangoproject/djangoproject/settings.py)
 * *TODO - Dan set up DNS - can we preset this?*
+Get url here:
+```
+CLOUDRUN_SERVICE_URL=$(gcloud run services describe django-cloudrun \
+  --platform managed \
+  --region $REGION  \
+  --format "value(status.url)")
+echo $CLOUDRUN_SERVICE_URL
+```
 
 ### 5. Set up Database (not yet working)
 Starting with Postgres per https://cloud.google.com/python/django/run
@@ -93,12 +101,34 @@ gcloud services enable \
 gsutil mb -l $REGION gs://$PROJECT_ID/django_bucket
 
 ### 7. Secret Manager
+```
+gcloud config set run/region $REGION
+```
+
 add username and password to bucket as .env
 ```
 echo DATABASE_URL=postgres://postgres_username:postgres_password@//cloudsql/$PROJECT_ID:$REGION:hello-world-sql-instance/hello-world-db > .env
 echo GS_BUCKET_NAME=$PROJECT_ID/django_bucket >> .env
 echo SECRET_KEY=$(cat /dev/urandom | LC_ALL=C tr -dc '[:alpha:]'| fold -w 50 | head -n1) >> .env
 ```
+
+```
+gcloud secrets create application_settings  --replication-policy="user-managed" --locations $REGION --data-file .env
+```
+
+Note need this installed:
+https://cloud.google.com/sql/docs/postgres/connect-instance-auth-proxy#debianubuntu
+
+following along with this:
+https://codelabs.developers.google.com/codelabs/cloud-run-django#6
+
+gcloud builds submit --pack image=gcr.io/${PROJECT_ID}/myimage
+<!-- admin_password="$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 30 | head -n 1)"
+
+echo -n "${admin_password}" | gcloud secrets create admin_password --replication-policy="user-managed" --locations $REGION --data-file=-
+
+gcloud secrets add-iam-policy-binding admin_password \
+  --member serviceAccount:${CLOUDBUILD} --role roles/secretmanager.secretAccessor -->
 ### 8. AlloyDB
 * Activate (for this we need AlloyDB, Compute Engine, Resource Manager and Service Networking APIs)
 

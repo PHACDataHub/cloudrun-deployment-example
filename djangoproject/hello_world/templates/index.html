@@ -1,0 +1,22 @@
+
+<h2>Hello world!</h2>
+<p>Options:</p>
+    <ul>
+        <li><a href="add_city">Add a City</a></li>  
+        <li><a href="delete_city">Remove a City</a></li>  
+
+    </ul>
+<p>Say hello to:</p>
+{% if all_cities %}
+     
+    <ul>
+    {% for city in all_cities %}
+    <!-- <li><a href="hello_city/{{ city.city }}/">{{ city.city }}</a></li> -->
+        <li><a href="hello_city/{{ city.city}}/">{{ city.city }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <ul>
+        <li>No cities are available.</li>  
+    </ul>
+{% endif %}

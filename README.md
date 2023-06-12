@@ -32,7 +32,10 @@ Both of these are running at the moment, but sounds like we're leaning towards t
 - [] Automate approved hosts (Dan got SSL working for DNS so may not need this?)
 - [] Dependabot (will need to add in cloud build and github actions versions as well) 
 - [] fix docker-compose and set up for local testing (postgres or [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install)
+- [] Open telemetry https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
+- [] https://cloud.google.com/sql/docs/postgres/connect-auth-proxy#expandable-1 
 
+https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
 <!-- 
 #### Run tests (locally)
 (in django project directory)

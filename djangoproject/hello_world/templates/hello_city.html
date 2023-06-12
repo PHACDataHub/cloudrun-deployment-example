@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello City</title>
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hello {{ city.city }}!</h2>
+    <p>{{ city.description }}</p>
+
+    <a href="{% url 'index' %}" class="btn">Back</a>
+</body>
+</html>
