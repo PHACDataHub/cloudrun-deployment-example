@@ -111,6 +111,22 @@ steps:
   # This is the ~ to:
   # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
+    - id: "run migrations"
+    name: "gcr.io/cloud-builders/docker"
+    entrypoint: "docker"
+    args:
+      - "run"
+      - "--rm"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+      - "python"
+      - "manage.py"
+      - "makemigrations"
+      - "&&"
+      - "python"
+      - "manage.py"
+      - "migrate"
+    waitFor:
+      - "push image artifact registry"
 
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -143,13 +159,15 @@ steps:
   #   args: ["beta", "run", "jobs", "execute", "migrate-database",
   #          "--region", $_REGION, "--wait"]
 
-  - id: "run migrations"
-    entrypoint: gcloud
-    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    args: ["beta", "run", "jobs", "execute", "migrate-test",
-            "--region", $_REGION, "--wait"]
-    waitFor:
-    - "deploy container image to cloud run"
+  # - id: "run migrations"
+  #   entrypoint: gcloud
+  #   name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+  #   args: ["beta", "run", "jobs", "execute", "migrate-test",
+  #           "--region", $_REGION, "--wait"]
+  #   gcloud beta run jobs execute migrate-database --region $REGION --wait
+  #   waitFor:
+  #   - "deploy container image to cloud run"
+
 
 
 substitutions:
