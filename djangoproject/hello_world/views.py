@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_protect
 
 def hello(request):
     return HttpResponse("Hello, World!")
@@ -23,7 +24,7 @@ def index(request):
     }
     return render(request, "index.html", context)
 
-
+@csrf_protect
 def add_city(request):
     if request.method == "POST":
         city_form = CityForm(request.POST)
