@@ -137,11 +137,20 @@ steps:
 #$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated --add-cloudsql-instances
  
 #  from https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
-  - id: "server migrate"
-    name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+  # - id: "server migrate"
+  #   name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+  #   entrypoint: gcloud
+  #   args: ["beta", "run", "jobs", "execute", "migrate-database",
+  #          "--region", $_REGION, "--wait"]
+
+  - id: "run migrations"
     entrypoint: gcloud
-    args: ["beta", "run", "jobs", "execute",  "migrate-database",
-           "--region", $_REGION, "--wait"]
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    args: ["beta", "run", "jobs", "execute", "migrate-test",
+            "--region", $_REGION, "--wait"]
+    waitFor:
+    - "deploy container image to cloud run"
+
 
 substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)

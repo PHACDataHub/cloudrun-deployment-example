@@ -202,7 +202,7 @@ export SERVICE_NAME=hello-world
 export REGION=northamerica-northeast1
 
 # Get the image name (this includes SHA)
-~export IMAGE_NAME=$(gcloud run services describe $SERVICE_NAME --region $REGION --format "value(spec.template.spec.containers[0].image)")~
+export IMAGE_NAME=$(gcloud run services describe $SERVICE_NAME --region $REGION --format "value(spec.template.spec.containers[0].image)")
 
 export IMAGE_NAME=northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
@@ -212,10 +212,10 @@ export SQL_INSTANCE=$(gcloud run services describe $SERVICE_NAME --region $REGIO
 # example: phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:myinstance
 
 # Create Job
-gcloud beta run jobs create migrate-database \
+gcloud beta run jobs create migrate-test \
   --image $IMAGE_NAME \
   --region $REGION \
-  --command "migrate"
+  --command "python djangoproject/manage.py makemigrations && python djangoproject/manage.py migrate"
     <!-- --set-cloudsql-instances $SQL_INSTANCE \ -->
 
 ```
