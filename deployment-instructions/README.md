@@ -189,3 +189,42 @@ gcloud services vpc-peerings connect \
     --ranges=google-managed-services-default \
     --network=${NETWORK_NAME} \
     --project=$PROJECT_ID -->
+
+    ----------------------------------------
+### Migrations
+
+https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
+#### 1. Create a migration Cloud Run job 
+(from above)
+```
+export PROJECT_ID=$(gcloud config get-value project) 
+export SERVICE_NAME=hello-world
+export REGION=northamerica-northeast1
+
+# Get the image name (this includes SHA)
+~export IMAGE_NAME=$(gcloud run services describe $SERVICE_NAME --region $REGION --format "value(spec.template.spec.containers[0].image)")~
+
+export IMAGE_NAME=northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
+
+
+# Get the Cloud SQL Instance
+export SQL_INSTANCE=$(gcloud run services describe $SERVICE_NAME --region $REGION --format  "value(spec.template.metadata.annotations.'run.googleapis.com/cloudsql-instances')")
+# example: phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:myinstance
+
+# Create Job
+gcloud beta run jobs create migrate-database \
+  --image $IMAGE_NAME \
+  --region $REGION \
+  --command "migrate"
+    <!-- --set-cloudsql-instances $SQL_INSTANCE \ -->
+
+```
+#### 2. Add migration step to cloudbuild.yaml
+```
+  - id: "server migrate"
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: gcloud
+    args: ["beta", "run", "jobs", "execute",  "migrate-database",
+           "--region", $_REGION, "--wait"]
+```
+

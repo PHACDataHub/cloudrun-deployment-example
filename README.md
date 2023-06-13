@@ -7,8 +7,8 @@ Working towards deploying Django apps to Google Cloud Run using AlloyDB (via aut
 *Work in progress - determining a workflow using a hello-world app and postgres-like db, then will apply to a more applicable projects*
 
 ## Currently running on
-https://hello-world-vlfae7w5dq-nn.a.run.app/hello/ (from GitHub Actions)
-and https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/hello/ (from Cloud Build trigger).
+https://hello-world-vlfae7w5dq-nn.a.run.app/ (from GitHub Actions)
+and https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/ (from Cloud Build trigger).
 
 ## Deployment options
 1. GitHub Actions to run tests on a new Pull Request.  On a push to the main branch, a Cloud Build trigger will run through the steps outlined in [cloudbuild.yaml](./cloudbuild.yaml) to build the docker image, push to the image Artifact Registry and then deploy to Cloud Run (Cloud Run can only be deployed to from the Artifact Registry).
@@ -72,4 +72,12 @@ AlloyDB Omni (containerized version)
 * https://www.cloudskillsboost.google/course_sessions/3132244/labs/339626
 
 
+Migrations:
+https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
 
+Options: 
+* run from local computer with Auth proxy
+* run as part of build process 
+https://cloud.google.com/run/docs/managing/jobs
+
+gcloud run jobs update JOB_NAME --image IMAGE_URL
