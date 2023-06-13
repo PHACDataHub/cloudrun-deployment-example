@@ -111,7 +111,7 @@ steps:
   # This is the ~ to:
   # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
-    - id: "run migrations"
+  - id: "run migrations"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: "docker"
     args:
