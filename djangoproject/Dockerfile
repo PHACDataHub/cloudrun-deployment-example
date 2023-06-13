@@ -18,6 +18,15 @@ RUN pip install -r requirements.txt
 # Copy the project over
 COPY . .
 
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Set executable permissions for the entrypoint script
+RUN chmod +x /entrypoint.sh
+
+# Specify the entrypoint script as the container entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Expose port
 EXPOSE 8080
 

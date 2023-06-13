@@ -111,22 +111,22 @@ steps:
   # This is the ~ to:
   # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
-  - id: "run migrations"
-    name: "gcr.io/cloud-builders/docker"
-    entrypoint: "docker"
-    args:
-      - "run"
-      - "--rm"
-      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
-      - "python"
-      - "manage.py"
-      - "makemigrations"
-      - "&&"
-      - "python"
-      - "manage.py"
-      - "migrate"
-    waitFor:
-      - "push image artifact registry"
+  # - id: "run migrations"
+  #   name: "gcr.io/cloud-builders/docker"
+  #   entrypoint: "docker"
+  #   args:
+  #     - "run"
+  #     - "--rm"
+  #     - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
+  #     - "python"
+  #     - "djangoproject/manage.py"
+  #     - "makemigrations"
+  #     - "&&"
+  #     - "python"
+  #     - "djangoproject/manage.py"
+  #     - "migrate"
+  #   waitFor:
+  #     - "push image artifact registry"
 
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
