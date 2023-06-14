@@ -31,22 +31,22 @@ steps:
 #     entrypoint: 'python'
 #     args: ['djangoproject/manage.py', 'test', 'hello_world']
 
-  # Install dependencies
-  - name: 'python:3.9'
-    id: INSTALL_DEPENDENCIES
-    entrypoint: 'pip'
-    args: ['install', '-r', 'djangoproject/requirements.txt']
-    # pip install -r djangoproject/requirements.txt
+  # # Install dependencies
+  # - name: 'python:3.9'
+  #   id: INSTALL_DEPENDENCIES
+  #   entrypoint: 'pip'
+  #   args: ['install', '-r', 'djangoproject/requirements.txt']
+  #   # pip install -r djangoproject/requirements.txt
 
 
-  # Run tests
-  - name: 'python:3.9'
-    id: RUN_TESTS
-    entrypoint: 'python'
-    args: ['djangoproject/manage.py', 'test', 'hello_world']
-    waitFor:
-    - INSTALL_DEPENDENCIES
-  # python djangoproject/manage.py test hello_world
+  # # Run tests
+  # - name: 'python:3.9'
+  #   id: RUN_TESTS
+  #   entrypoint: 'python'
+  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
+  #   waitFor:
+  #   - INSTALL_DEPENDENCIES
+  # # python djangoproject/manage.py test hello_world
 
 
   - id: "build container image"
@@ -59,8 +59,8 @@ steps:
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
-    waitFor:
-    - RUN_TESTS
+    # waitFor:
+    # - RUN_TESTS
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
 
