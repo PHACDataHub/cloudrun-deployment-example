@@ -60,11 +60,22 @@ gcloud builds triggers create github \
 # Enable Cloud Run Service    
 gcloud services enable run.googleapis.com
 
+# gcloud projects add-iam-policy-binding $PROJECT_ID --member=MEMBER --role=roles/run.admin
+
+
 # Bind permissions for cloud build to push to cloud run 
+# gcloud projects add-iam-policy-binding $PROJECT_ID \
+# --member=serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com \
+# --role=roles/run.admin \
+# --role=roles/iam.serviceAccountUser
+# --role=roles/artifactregistry.writer
+
 gcloud projects add-iam-policy-binding $PROJECT_ID \
---member=serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com \
---role=roles/run.admin \
---role=roles/iam.serviceAccountUser
+    --member="serviceAccount:service-249044526600@gcp-sa-cloudbuild.iam.gserviceaccount.com" \
+    --role="roles/cloudbuild.serviceAgent" \
+    --role=roles/run.admin \
+    --role=roles/artifactregistry.writer \
+    --role=roles/iam.serviceAccountUser
 
 
 # ---- CLOUD SQL (postgres) -----
