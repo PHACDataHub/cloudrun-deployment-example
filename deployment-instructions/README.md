@@ -215,7 +215,7 @@ export SQL_INSTANCE=$(gcloud run services describe $SERVICE_NAME --region $REGIO
 gcloud beta run jobs create migrate-test \
   --image $IMAGE_NAME \
   --region $REGION \
-  --command "python djangoproject/manage.py makemigrations && python djangoproject/manage.py migrate"
+  --command "python manage.py makemigrations" && python manage.py migrate"
     <!-- --set-cloudsql-instances $SQL_INSTANCE \ -->
 
 ```
@@ -227,4 +227,45 @@ gcloud beta run jobs create migrate-test \
     args: ["beta", "run", "jobs", "execute",  "migrate-database",
            "--region", $_REGION, "--wait"]
 ```
+
+## When working with SQL lite, add migration to deployment by
+
+#### 1. Add the following to settings.py
+https://docs.djangoproject.com/en/4.2/ref/csrf/
+```
+CSRF_TRUSTED_ORIGINS = [
+    'https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+]
+```
+(replace with your Cloud Run service URL)
+
+#### 1. Add [entrypoint.sh](../djangoproject/entrypoint.sh) to your djangoproject (along side the Dockerfile)
+
+#### 3. Modify Dockerfile to specify entrypoint script and change the permissions of file. 
+
+
+## Open Telemetry 
+
+Deploy as sidecar:
+
+* https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
+* https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run
+
+Enable Cloud Trace and Monitoring
+```
+gcloud services enable cloudtrace.googleapis.com
+gcloud services enable monitoring.googleapis.com
+```
+
+Add these roles to Cloud Run service account:
+* roles/monitoring.metricWriter
+* roles/cloudtrace.agent
+* roles/logging.logWriter
+
+Cloud build needs these ones:
+* roles/iam.serviceAccountUser
+* roles/storage.objectViewer
+* roles/logging.logWriter
+* roles/artifactregistry.createOnPushWriter
+* roles/run.admin
 

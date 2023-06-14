@@ -1,1 +1,0 @@
-migrate: python3 djangoproject/manage.py migrate

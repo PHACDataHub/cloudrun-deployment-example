@@ -18,14 +18,17 @@ RUN pip install -r requirements.txt
 # Copy the project over
 COPY . .
 
-# Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
 
-# Set executable permissions for the entrypoint script
+# Set executable permissions
 RUN chmod +x /entrypoint.sh
 
-# Specify the entrypoint script as the container entrypoint
+# Specify the entrypoint as the container entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
+
+# # Or Do this and remove entrypoint.sh
+# # Apply database migrations
+# RUN python manage.py makemigrations
+# RUN python manage.py migrate
 
 # Expose port
 EXPOSE 8080
