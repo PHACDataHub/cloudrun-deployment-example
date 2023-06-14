@@ -23,7 +23,7 @@ COPY . .
 RUN chmod +x ./entrypoint.sh
 
 # Specify the entrypoint as the container entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
 
 # # Or Do this and remove entrypoint.sh
 # # Apply database migrations
