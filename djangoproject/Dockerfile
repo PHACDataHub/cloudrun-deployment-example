@@ -20,7 +20,7 @@ COPY . .
 
 
 # Set executable permissions
-RUN chmod +x /entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Specify the entrypoint as the container entrypoint
 ENTRYPOINT ["/entrypoint.sh"]

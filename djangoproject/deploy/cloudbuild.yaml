@@ -60,7 +60,7 @@ steps:
         "djangoproject/.",
       ]
     waitFor:
-    - RUN-TESTS
+    - RUN_TESTS
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
 
