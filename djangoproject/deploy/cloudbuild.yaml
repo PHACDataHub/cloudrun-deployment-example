@@ -11,18 +11,18 @@
   # https://medium.com/kunder/how-to-integrate-github-checks-with-google-cloud-build-and-python-tests-5fd05c4f3dff
 
 steps:
-  # - name: python:3.9
-  #   id: INSTALL
-  #   entrypoint: python3
-  #   args:
-  #   - '-m'
-  #   - 'pip'
-  #   - 'install'
-  #   - '-t'
-  #   - '.'
-  #   - '-r'
-  #   - 'djangoproject/requirements.txt'
-  #   # python3 -m pip install -t . -r djangoproject/requirements.txt
+#   - name: python:3.9
+#     id: INSTALL
+#     entrypoint: python3
+#     args:
+#     - '-m'
+#     - 'pip'
+#     - 'install'
+#     - '-t'
+#     - '.'
+#     - '-r'
+#     - 'djangoproject/requirements.txt'
+#     # python3 -m pip install -t . -r djangoproject/requirements.txt
 
 
 # # Run tests
@@ -31,59 +31,23 @@ steps:
 #     entrypoint: 'python'
 #     args: ['djangoproject/manage.py', 'test', 'hello_world']
 
-  # # Install dependencies
-  # - name: 'python:3.9'
-  #   id: INSTALL_DEPENDENCIES
-  #   entrypoint: 'pip'
-  #   args: ['install', '-r', 'djangoproject/requirements.txt']
-  #   # pip install -r djangoproject/requirements.txt
+  # Install dependencies
+  - name: 'python:3.9'
+    id: INSTALL_DEPENDENCIES
+    entrypoint: 'pip'
+    args: ['install', '-r', 'djangoproject/requirements.txt']
+    # pip install -r djangoproject/requirements.txt
 
 
-  # # Run tests
-  # - name: 'python:3.9'
-  #   id: TESTS
-  #   entrypoint: 'python'
-  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
-  # # python djangoproject/manage.py test hello_world
+  # Run tests
+  - name: 'python:3.9'
+    id: RUN_TESTS
+    entrypoint: 'python'
+    args: ['djangoproject/manage.py', 'test', 'hello_world']
+    waitFor:
+    - INSTALL_DEPENDENCIES
+  # python djangoproject/manage.py test hello_world
 
-# # Unit tests
-#   - name: python:3.9
-#     entrypoint: python3
-#     id: RUN-UNIT-TESTS
-#     args:
-#     - '-m'
-#     - 'nose2'
-#     - '-s'
-#     - 'functions'
-#     - '-c'
-#     - 'functions/nose2.cfg'
-#     waitFor:
-#     - INSTALL
-
-# # Test coverage
-#   - name: python:3.9
-#     entrypoint: python3
-#     id: RUN-COVERAGE-TESTS
-#     args:
-#     - '-c'
-#     - 'import sys; from pycobertura import Cobertura, TextReporter; cobertura = Cobertura("functions/coverage.xml"); tr = TextReporter(cobertura); coverage = tr.generate().split(" ")[-1].strip("%"); print("Coverage OK:",coverage + "% > 90%") if float(coverage) > 90 else sys.exit("Coverage is less than 90%")'
-#     waitFor:
-#     - RUN-UNIT-TESTS
-
-# # Lint
-#   - name: python:3.9
-#     entrypoint: python3
-#     id: RUN-LINTER-CHECK
-#     args:
-#     - '-m'
-#     - 'flake8'
-#     - '--ignore=E501'
-#     - 'functions/'
-#     waitFor:
-#     - INSTALL
-#  python djangoproject/manage.py check 
-#  or 
-#  flake8 .
 
   - id: "build container image"
     name: "gcr.io/cloud-builders/docker"
@@ -95,8 +59,8 @@ steps:
         # docker context _root  (where you'd find the Dockerfile in project to build/ push)
         "djangoproject/.",
       ]
-    # waitFor:
-    # - RUN-UNIT-TESTS
+    waitFor:
+    - RUN-TESTS
   # This is ~ as:
   #  $ docker build  -t  northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world djangoproject/.
 
@@ -109,20 +73,20 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
 
-# from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "${_IMAGE_COLLECTOR}", "./collector"]
-    id: BUILD_COLLECTOR
-    waitFor: ["-"]
+# # from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
+#   - name: "gcr.io/cloud-builders/docker"
+#     args: ["build", "-t", "${_IMAGE_COLLECTOR}", "./collector"]
+#     id: BUILD_COLLECTOR
+#     waitFor: ["-"]
 
-# from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "${_IMAGE_COLLECTOR}"]
-    id: PUSH_COLLECTOR
-    waitFor:
-      - BUILD_COLLECTOR
-  # This is the ~ to:
-  # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
+# # from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
+#   - name: "gcr.io/cloud-builders/docker"
+#     args: ["push", "${_IMAGE_COLLECTOR}"]
+#     id: PUSH_COLLECTOR
+#     waitFor:
+#       - BUILD_COLLECTOR
+#   # This is the ~ to:
+#   # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
 
   # - id: "run migrations"
   #   name: "gcr.io/cloud-builders/docker"
