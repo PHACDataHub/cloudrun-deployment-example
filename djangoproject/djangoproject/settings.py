@@ -15,6 +15,13 @@ import os
 import environ
 import psycopg2
 from urllib.parse import urlparse
+from google.cloud import secretmanager
+
+def get_secret(secret_name):
+    client = secretmanager.SecretManagerServiceClient()
+    secret_path = client.secret_version_path('phx-01h1yptgmche7jcy01wzzpw2rf', secret_name, 'latest')
+    response = client.access_secret_version(request={"name": secret_path})
+    return response.payload.data.decode("UTF-8")
 
 env = environ.Env()
 environ.Env.read_env()
@@ -100,7 +107,8 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
-db_url = os.getenv('hello-world-env-secret-DATABASE_URL')
+# db_url = os.getenv('hello-world-env-secret-DATABASE_URL')
+db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 
 url = urlparse(db_url)
 
