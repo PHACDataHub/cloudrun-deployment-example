@@ -92,7 +92,7 @@ steps:
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
-        args:
+    args:
       [
         "run",
         "deploy",
