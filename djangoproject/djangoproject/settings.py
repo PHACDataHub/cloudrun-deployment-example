@@ -110,16 +110,28 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-# db_url = os.getenv('hello-world-env-secret-DATABASE_URL')
-db_url = get_secret('hello-world-env-secret-DATABASE_URL')
-# postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 
-# psql "postgresql://epi-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/epi-database"
-# echo $PRIMARY_INSTANCE_IP
+# ---- IF USING PROXY --- (https://cloud.google.com/python/django/run)
+# # Use django-environ to parse the connection string
+# DATABASES = {"default": env.db()}
+
+# # If the flag as been set, configure to use proxy
+# if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+#     DATABASES["default"]["HOST"] = "127.0.0.1"
+#     DATABASES["default"]["PORT"] = 5432
+
+
+# ----- IF USING DAN"S SOCKET METHOD --- (DOESN NOT WORK YET!!) -------------------------
+
+db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+# (VALUES FROM hello-world-env-secret-DATABASE_URL below)
+# postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
+# psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
+# echo $PRIMARY_INSTANCE_IP:
 # 35.203.114.222
 url = urlparse(db_url)
 
-# modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s
+# modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s, but also tried many other options (including the options field for host - basically need to set host to local host and have it realize its a socket)
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -137,28 +149,8 @@ url = urlparse(db_url)
 #         # 'PORT': 5432,
 #     }
 # }
+#-------------------------------------------
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-#         "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-#         "USER": os.environ.get("SQL_USER", "user"),
-#         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-#         "HOST": os.environ.get("SQL_HOST", "localhost"),
-#         "PORT": os.environ.get("SQL_PORT", "5432"),
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'dbtest', 
-#         'USER': 'postgres',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost', 
-#         'PORT': '5432',
-#     }
-# }
 
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
@@ -182,16 +174,6 @@ if os.getenv('GITHUB_WORKFLOW'):
 #             'PORT': os.getenv('DB_PORT')
 #         }
 #     }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'hello_world_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'password123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 

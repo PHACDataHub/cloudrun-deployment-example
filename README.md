@@ -17,7 +17,22 @@ and https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/ (from 
 
 Both of these are running at the moment, but sounds like we're leaning towards the Cloud Build trigger option as it's more inline with pull based Zero Trust model.
 
-### TODO 
+## Status 
+Working towards connecting the database instance with Cloud Run instance.  
+#### 1. Socket
+Dan has a [way that works](https://github.com/daneroo/phac-epi-garden/tree/main), but we're still struggling to get it up and running with Django.  This method connects to a local socket in the Cloud Run container that Google will 'magic-black-box' connect to  Cloud SQL (similar to [this](https://youtu.be/cBrn5IM4mA8?t=430).)
+* Pros - it works (well almost works here)
+* Cons - it uses a public IP address (with an empty whitelist), but may not be ideal in production. 
+
+#### 2. Auth Proxy 
+John's been working on the Auth Proxy method - and has it working for a [wagtail deployment](https://wagtail-cloudrun-vlfae7w5dq-uc.a.run.app/). Next is moving towards implimenting this as a sidecar for continuous deployment. 
+
+
+
+Deployment instructions (work in progress as we iron out the details), are found in the [deploy folder](./deploy/), along with associated yaml and shell scripts capture the gcloud commands for set up.  
+
+
+### TODO (clean this up and move any of these actions to repo issues)
 - [] Database (add one to this repo or fork an example)
 - [] Try [Cloud SQL Auth Proxy](https://cloud.google.com/python/django/run) modify for postgres then AlloyDB
 - [] Try [Cloud SQL Connector](https://cloud.google.com/sql/docs/mysql/connect-connectors)
@@ -68,6 +83,7 @@ To look at:
 * https://cloud.google.com/sql/docs/mysql/connect-run
 * https://cloud.google.com/sql/docs/mysql/connect-run#private-ip
 * https://cloud.google.com/alloydb#section-5
+* https://github.com/GoogleCloudPlatform/cloud-sql-proxy
 
 
 AlloyDB Omni (containerized version)
