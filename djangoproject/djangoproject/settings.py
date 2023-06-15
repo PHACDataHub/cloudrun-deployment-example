@@ -102,13 +102,13 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         # 'NAME': BASE_DIR / 'db.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 # db_url = os.getenv('hello-world-env-secret-DATABASE_URL')
 db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 # postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
@@ -119,23 +119,23 @@ db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 url = urlparse(db_url)
 
 # modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
-        # query:{
-        #     "unix_sock": "/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/.s.PGSQL.5432"#.format(os.environ.get('CLOUD_SQL_CONNECTION_NAME'))
-        # }
-        'OPTIONS': {
-            'options': '-c host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance'
-        },
-        # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-        # 'HOST': 'localhost',
-        # 'PORT': 5432,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': url.path[1:],
+#         'USER': url.username,
+#         'PASSWORD': url.password,
+#         # query:{
+#         #     "unix_sock": "/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/.s.PGSQL.5432"#.format(os.environ.get('CLOUD_SQL_CONNECTION_NAME'))
+#         # }
+#         'OPTIONS': {
+#             'options': '-c host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance'
+#         },
+#         # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#         # 'HOST': 'localhost',
+#         # 'PORT': 5432,
+#     }
+# }
 
 # DATABASES = {
 #     "default": {
