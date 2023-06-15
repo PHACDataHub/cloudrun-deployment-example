@@ -132,8 +132,8 @@ DATABASES = {
             'options': '-c host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance'
         },
         # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-        'HOST': url.hostname,
-        'PORT': 5432,
+        # 'HOST': 'localhost',
+        # 'PORT': 5432,
     }
 }
 
