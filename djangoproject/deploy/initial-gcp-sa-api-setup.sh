@@ -80,6 +80,15 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role=roles/secretmanager.secretAccessor
 
 
+# grant compute account access to secrets:
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:249044526600-compute@developer.gserviceaccount.com" \
+    --role=roles/secretmanager.secretAccessor
+
+   
+
+
+
 # ---- CLOUD SQL (postgres) -----
 # Create database password:
 export DB_PASSWORD=$(openssl rand -base64 16 | tr -dc A-Za-z0-9 | head -c16 ; echo '')
