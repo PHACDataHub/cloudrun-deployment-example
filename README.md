@@ -54,6 +54,10 @@ CICD options (TODO - add in testing and linting steps)
 * [Cloud Build Trigger](https://cloud.google.com/run/docs/quickstarts/deploy-continuously)
 * [GitHub Actions for Deploy to Cloud Run](https://github.com/google-github-actions/deploy-cloudrun)
 
+videos 
+* https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s
+* https://www.youtube.com/watch?v=rebyg9_eTHM
+* [cloud Run + Cloud SQL set up](https://www.youtube.com/watch?v=cBrn5IM4mA8[])
 
 Database 
 

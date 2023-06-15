@@ -141,3 +141,45 @@ gcloud services enable \
 
 # * Make bucket (needed to store .env?)
 gsutil mb -p $PROJECT_ID -l $REGION -b on gs://$GCS_BUCKET_NAME
+
+
+From https://github.com/daneroo/phac-epi-garden/blob/main/deploy/manual/README.md
+# get the password
+DB_PASSWORD=$(gcloud secrets versions access latest --secret="hello-world-db-password")
+echo ${DB_PASSWORD}
+# open a connection,
+gcloud sql connect hello-world-instance --user=hello-world-user --database=hello-world-db
+
+# Even if we can connect, we must open with above: gcloud sql connect hello-world-instance...
+# Even if it is public for now:
+DB_PASSWORD=$(gcloud secrets versions access latest --secret="hello-world-db-password")
+# hope primary is the first address!
+# PRIMARY_INSTANCE_IP=$(gcloud sql instances describe hello-world-instance --format='value(ipAddresses[0].ipAddress)')
+# Or more mrecise qirh jq
+PRIMARY_INSTANCE_IP=$(gcloud sql instances describe hello-world-instance --format=json | jq -r '.ipAddresses[] | select(.type=="PRIMARY") | .ipAddress')
+
+psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db"
+
+
+# from https://www.youtube.com/watch?v=CNnzbNQgyzo&t=454s
+
+# create service account key for cloud run:
+gcloud iam service-accounts keys create ~key.json \
+--iam-account <SA_NAME>@$PROJECT_ID.iam.gserviceaccount.com
+
+# turn into secret
+kubectil create secret generic <your sa secret> \
+--from-file=service_account.json=~/key.json
+
+# mount as a volume
+volumes:
+-anme: <your-sa-secret-volume>
+secret:
+    secretName: <your-sa-secret>
+
+# image: 'gcr.io/cloudsql-docker/gce-proxy:1.17
+# command:
+# - /cloud_sql_proxy
+# -instances
+# securityContext: ..
+#     runAsNonRoot: true
