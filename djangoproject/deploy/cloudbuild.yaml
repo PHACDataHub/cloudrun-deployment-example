@@ -117,8 +117,10 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
-        # "--add-cloudsql-instances",
-        # "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+        "--add-cloudsql-instances",
+        "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+        "--set-secrets",
+        "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
         "--platform", 
         "managed",
         "--allow-unauthenticated",
@@ -153,7 +155,7 @@ substitutions:
   _SERVICE_NAME: "hello-world"
   _CLOUD_RUN_SERVICE_NAME: "hello-world-from-cloud-build-trigger"
   _REGION: "northamerica-northeast1"
-  # _SQL_INSTANCE_NAME: "hello-world-sql-instance"
+  _SQL_INSTANCE_NAME: "hello-world-sql-instance"
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"
