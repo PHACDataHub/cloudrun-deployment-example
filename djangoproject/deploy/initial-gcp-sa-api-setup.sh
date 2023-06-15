@@ -83,18 +83,26 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 # grant compute account access to secrets:
 gcloud projects add-iam-policy-binding $PROJECT_ID \
     --member="serviceAccount:249044526600-compute@developer.gserviceaccount.com" \
-    --role=roles/secretmanager.secretAccessor
+    --role=roles/secretmanager.secretAccessor \
+    --role=roles/cloudsql.client
 
    
 
 
 
 # ---- CLOUD SQL (postgres) -----
+# enable APIS
+gcloud services enable sqladmin.googleapis.com
+gcloud services enable sql-component.googleapis.com
+
 # Create database password:
 export DB_PASSWORD=$(openssl rand -base64 16 | tr -dc A-Za-z0-9 | head -c16 ; echo '')
 echo -n "${DB_PASSWORD}" | gcloud secrets create hello-world-db-password --replication-policy="user-managed" --locations="${REGION}" --data-file=-
 
 # Create SQL instance
+
+
+
 gcloud sql instances create $SQL_INSTANCE \
     --project $PROJECT_ID \
     --database-version=POSTGRES_14 \
