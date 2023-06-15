@@ -76,6 +76,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+    'https://hello-world-vlfae7w5dq-nn.a.run.app',
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'
