@@ -129,7 +129,7 @@ echo -n "postgresql://hello-world-user:${DB_PASSWORD}@localhost/${DB_NAME}?host=
 # create secret, if not exists:
 gcloud secrets create "hello-world-env-secret-DATABASE_URL" --replication-policy="user-managed" --locations="${REGION}"
 # Then update the secret with:
-echo -n "postgresql://hello-world-user:${DB_PASSWORD}@localhost/{DB_NAME}?host=/cloudsql/${INSTANCE_CONNECTION_NAME}" | gcloud secrets versions add "hello-world-env-secret-DATABASE_URL" --data-file=-
+echo -n "postgresql://hello-world-user:${DB_PASSWORD}@localhost/${DB_NAME}?host=/cloudsql/${INSTANCE_CONNECTION_NAME}" | gcloud secrets versions add "hello-world-env-secret-DATABASE_URL" --data-file=-
 # Or copy it from hello-world-db-connection-string
 gcloud secrets versions access latest --secret=hello-world-db-connection-string | gcloud secrets versions add "hello-world-env-secret-DATABASE_URL" --data-file=-
 
