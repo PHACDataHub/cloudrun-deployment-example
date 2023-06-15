@@ -130,8 +130,8 @@ steps:
     #   ]
   
 # Similar to:
-gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world --region northamerica-northeast1  --add-cloudsql-instances\
- $PROJECT_ID:$REGION:hello-world-sql-instance --set-secrets DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest --platform managed --allow-unauthenticated
+# gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:latest --region northamerica-northeast1  --add-cloudsql-instances\
+#  $PROJECT_ID:$REGION:hello-world-sql-instance --set-secrets DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest --platform managed --allow-unauthenticated
 #  from https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
   # - id: "server migrate"
   #   name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
