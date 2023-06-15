@@ -125,11 +125,12 @@ DATABASES = {
         'NAME': url.path[1:],
         'USER': url.username,
         'PASSWORD': url.password,
-        query:{
-            "unix_sock": "/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/.s.PGSQL.5432"#.format(os.environ.get('CLOUD_SQL_CONNECTION_NAME'))
-        }
+        # query:{
+        #     "unix_sock": "/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/.s.PGSQL.5432"#.format(os.environ.get('CLOUD_SQL_CONNECTION_NAME'))
+        # }
+        'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
         # 'HOST': url.hostname,
-        # 'PORT': url.port,
+        'PORT': 5432,
     }
 }
 
