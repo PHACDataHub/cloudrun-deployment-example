@@ -89,6 +89,7 @@ steps:
   #   waitFor:
   #     - "push image artifact registry"
 
+
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
@@ -96,42 +97,24 @@ steps:
       [
         "run",
         "deploy",
-        "hello-world",
+        "${_CLOUD_RUN_SERVICE_NAME}",
         "--image",
-        "northamerica-northeast1-docker.pkg.dev/${PROJECT_ID}/hello-world-app/hello-world:${COMMIT_SHA}",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
-        "--add-cloudsql-instances",
-        "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
-        "--set-secrets",
-        "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
+        # "--add-cloudsql-instances",
+        # "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+        # "--set-secrets",
+        # "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
         "--platform", 
         "managed",
-        "--allow-unauthenticated",
-        
+        "--allow-unauthenticated",   
       ]
-    # args:
-    #   [
-    #     "run",
-    #     "deploy",
-    #     "${_CLOUD_RUN_SERVICE_NAME}",
-    #     "--image",
-    #     "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-    #     "--region",
-    #     "${_REGION}",
-    #     "--add-cloudsql-instances",
-    #     "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
-    #     "--set-secrets",
-    #     "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
-    #     "--platform", 
-    #     "managed",
-    #     "--allow-unauthenticated",
-        
-    #   ]
   
 # # Similar to:
 # gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world:ccf605a9a6c895ccbdb0ed56eaeb8273de26d7f9 --region northamerica-northeast1  --add-cloudsql-instances\
 #  $PROJECT_ID:$REGION:hello-world-sql-instance --set-secrets DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest --platform managed --allow-unauthenticated
+
 #  from https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
   # - id: "server migrate"
   #   name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
