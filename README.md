@@ -32,25 +32,15 @@ John's been working on the Auth Proxy method - and has it working for a [wagtail
 Deployment instructions (work in progress as we iron out the details), are found in the [deploy folder](./deploy/), along with associated yaml and shell scripts capture the gcloud commands for set up.  
 
 
-### TODO (clean this up and move any of these actions to repo issues)
-- [] Database (add one to this repo or fork an example)
-- [] Try [Cloud SQL Auth Proxy](https://cloud.google.com/python/django/run) modify for postgres then AlloyDB
-- [] Try [Cloud SQL Connector](https://cloud.google.com/sql/docs/mysql/connect-connectors)
-- [] Determine how to instantiate AlloyDB without a private network connection (can use [Auth Proxy](https://cloud.google.com/alloydb/docs/auth-proxy/overview) and [connector](https://github.com/GoogleCloudPlatform/alloydb-go-connector))
-- [] secret management (https://cloud.google.com/secret-manager/docs/quickstart)
-- [] Determine migration workflow with no downtime (look at [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs) or [buildpacks](https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) )
-- [] Determine when tests should run.  Currently, tests run on pull request - can we also run these test prior to the Cloud Build (rather than concurently) on push to main? Or should we be locking downthe main branch so pull requests naturally always happen before push to main 
-- [] Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
-- [] Connecting GitHub Repo to Cloud Build is also a manual step and requires someone's GitHub account for authorization - Keith is looking into other options/ possibilities
-- [] Yakima account (Config Connector for ifrastucture as code set up (IaS) has a misleading name in the IAM console - change this to something more user friendly if we don't know what it is)
-- [] Learn if projects are using pdm or requirements.txt/ venvs are being used for patterns
-- [] Automate approved hosts (Dan got SSL working for DNS so may not need this?)
-- [] Dependabot (will need to add in cloud build and github actions versions as well) 
-- [] fix docker-compose and set up for local testing (postgres or [AlloyDB container](https://cloud.google.com/alloydb/docs/omni/install#install)
-- [] Open telemetry https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
-- [] https://cloud.google.com/sql/docs/postgres/connect-auth-proxy#expandable-1 
+### TODO (clean this up and/or turn into repo issues)
 
-https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
+* Determine when tests should run.  Currently, tests run on pull request can we also run these test prior to the Cloud Build (rather than concurently) on push to main? Or should we be locking downthe main branch so pull requests naturally always happen before push to main 
+* Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
+* Connecting GitHub Repo to Cloud Build is also a manual step and requires someone's GitHub account for authorization - Keith is looking into other options/ possibilities
+* Yakima account (Config Connector for ifrastucture as code set up (IaS) has a misleading name in the IAM console - change this to something more user friendly if we don't know what it is)
+* Automate approved hosts (Dan got SSL working for DNS so may not need this?)
+
+
 <!-- 
 #### Run tests (locally)
 (in django project directory)
@@ -63,6 +53,9 @@ https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-c
 * https://github.com/google-github-actions/deploy-cloudrun
 * https://cloud.google.com/alloydb
 * https://cloud.google.com/run/docs/deploying#sidecars
+* https://cloud.google.com/blog/products/serverless/cloud-run-now-supports-multi-container-deployments
+* https://cloud.google.com/sql/docs/postgres/connect-auth-proxy#expandable-1 
+* secret management (https://cloud.google.com/secret-manager/docs/quickstart
 
 
 CICD options (TODO - add in testing and linting steps)
@@ -84,16 +77,22 @@ To look at:
 * https://cloud.google.com/sql/docs/mysql/connect-run#private-ip
 * https://cloud.google.com/alloydb#section-5
 * https://github.com/GoogleCloudPlatform/cloud-sql-proxy
+* [Cloud SQL Auth Proxy](https://cloud.google.com/python/django/run) modify for postgres then AlloyDB
+* [Cloud SQL Connector](https://cloud.google.com/sql/docs/mysql/connect-connectors)
+* https://cloud.google.com/alloydb/docs/auth-proxy/overview
+* https://github.com/GoogleCloudPlatform/alloydb-go-connector
 
 
-AlloyDB Omni (containerized version)
+AlloyDB Omni (containerized version - for testing)
 * https://cloud.google.com/alloydb/docs/omni/install#install
 * https://codelabs.developers.google.com/create-alloydb-database-with-cloud-run-job
 * https://www.cloudskillsboost.google/course_sessions/3132244/labs/339626
 
 
 Migrations:
-https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
+* https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
+* [cloudmigrate.yaml](https://cloud.google.com/python/django/run#:~:text=The%20cloudmigrate.yaml%20file%20performs)
+* https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
 
 Options: 
 * run from local computer with Auth proxy
