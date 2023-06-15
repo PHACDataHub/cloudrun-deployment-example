@@ -31,22 +31,6 @@ steps:
 #     entrypoint: 'python'
 #     args: ['djangoproject/manage.py', 'test', 'hello_world']
 
-  # # Install dependencies
-  # - name: 'python:3.9'
-  #   id: INSTALL_DEPENDENCIES
-  #   entrypoint: 'pip'
-  #   args: ['install', '-r', 'djangoproject/requirements.txt']
-  #   # pip install -r djangoproject/requirements.txt
-
-
-  # # Run tests
-  # - name: 'python:3.9'
-  #   id: RUN_TESTS
-  #   entrypoint: 'python'
-  #   args: ['djangoproject/manage.py', 'test', 'hello_world']
-  #   waitFor:
-  #   - INSTALL_DEPENDENCIES
-  # # python djangoproject/manage.py test hello_world
 
 
   - id: "build container image"
@@ -108,13 +92,13 @@ steps:
   - id: "deploy container image to cloud run"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
-    args:
+        args:
       [
         "run",
         "deploy",
-        "${_CLOUD_RUN_SERVICE_NAME}",
+        "hello-world",
         "--image",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        "northamerica-northeast1-docker.pkg.dev/${PROJECT_ID}/hello-world-app/hello-world:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
         "--add-cloudsql-instances",
@@ -126,11 +110,28 @@ steps:
         "--allow-unauthenticated",
         
       ]
+    # args:
+    #   [
+    #     "run",
+    #     "deploy",
+    #     "${_CLOUD_RUN_SERVICE_NAME}",
+    #     "--image",
+    #     "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+    #     "--region",
+    #     "${_REGION}",
+    #     "--add-cloudsql-instances",
+    #     "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+    #     "--set-secrets",
+    #     "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
+    #     "--platform", 
+    #     "managed",
+    #     "--allow-unauthenticated",
+        
+    #   ]
   
-      # - --add-cloudsql-instances PROJECT_ID:REGION:INSTANCE_NAME  (for DB)
 # Similar to:
-#$ gcloud run deploy hello-world-app --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world --region northamerica-northeast1 --allow-unauthenticated --add-cloudsql-instances
- 
+gcloud run deploy hello-world --image northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world --region northamerica-northeast1  --add-cloudsql-instances\
+ $PROJECT_ID:$REGION:hello-world-sql-instance --set-secrets DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest --platform managed --allow-unauthenticated
 #  from https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs
   # - id: "server migrate"
   #   name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"

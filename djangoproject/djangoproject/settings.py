@@ -44,7 +44,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'hello-world-65z3ddbfoa-nn.a.run.app',
     'hello-world-vlfae7w5dq-nn.a.run.app',
-    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app'
+    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+    'hello-world-app-vlfae7w5dq-nn.a.run.app',
+    'hello-world-vlfae7w5dq-nn.a.run.app'
     ]
 
 
