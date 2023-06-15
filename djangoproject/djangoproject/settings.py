@@ -111,17 +111,25 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 # }
 # db_url = os.getenv('hello-world-env-secret-DATABASE_URL')
 db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+# postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 
+# psql "postgresql://epi-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/epi-database"
+# echo $PRIMARY_INSTANCE_IP
+# 35.203.114.222
 url = urlparse(db_url)
 
+# modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': url.path[1:],
         'USER': url.username,
         'PASSWORD': url.password,
-        'HOST': url.hostname,
-        'PORT': url.port,
+        query:{
+            "unix_sock": "/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/.s.PGSQL.5432"#.format(os.environ.get('CLOUD_SQL_CONNECTION_NAME'))
+        }
+        # 'HOST': url.hostname,
+        # 'PORT': url.port,
     }
 }
 
