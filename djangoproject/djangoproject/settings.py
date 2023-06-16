@@ -117,31 +117,50 @@ db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 url = urlparse(db_url)
 
 
-if os.environ.get('K_REVISION', None): # checks if running in docker 
+# if os.environ.get('K_REVISION', None): # checks if running in docker 
     
-    DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'ENGINE': 'django.db.backends.postgresql',
-            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-            # 'HOST': '127.0.0.1',
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
-        }
+#     DATABASES = {
+#         'default': {
+#             # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#             # 'HOST': '127.0.0.1',
+#             'NAME': url.path[1:],
+#             'USER': url.username,
+#             'PASSWORD': url.password,
+#         }
+#     }
+# else:
+#     DATABASES = {
+#             'default': {
+#                 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#                 'ENGINE': 'django.db.backends.postgresql',
+#                 # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#                 'HOST': '127.0.0.1',
+#                 'NAME': url.path[1:],
+#                 'USER': url.username,
+#                 'PASSWORD': url.password,
+#             }
+#         }
+
+DATABASES = {}
+
+try:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'PASSWORD': url.password,
     }
-else:
-    DATABASES = {
-            'default': {
-                # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'ENGINE': 'django.db.backends.postgresql',
-                # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-                'HOST': '127.0.0.1',
-                'NAME': url.path[1:],
-                'USER': url.username,
-                'PASSWORD': url.password,
-            }
-        }
+except Exception:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '127.0.0.1',
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'PASSWORD': url.password,
+    }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
