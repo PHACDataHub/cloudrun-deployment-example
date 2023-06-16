@@ -42,24 +42,24 @@ DEBUG = True
 # SECURITY WARNING: It's recommended that you use this when
 # running in production. The URL will be known once you first deploy
 # to Cloud Run. This code takes the URL and converts it to both these settings formats.
-CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
-if CLOUDRUN_SERVICE_URL:
-    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
-    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-else:
-    ALLOWED_HOSTS = ["*"]
+# CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+# if CLOUDRUN_SERVICE_URL:
+#     ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+#     CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+#     SECURE_SSL_REDIRECT = True
+#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# else:
+#     ALLOWED_HOSTS = ["*"]
 
-# ALLOWED_HOSTS = [
-#     '0.0.0.0', 
-#     '127.0.0.1',
-#     'hello-world-65z3ddbfoa-nn.a.run.app',
-#     'hello-world-vlfae7w5dq-nn.a.run.app',
-#     'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
-#     'hello-world-app-vlfae7w5dq-nn.a.run.app',
-#     'hello-world-vlfae7w5dq-nn.a.run.app'
-#     ]
+ALLOWED_HOSTS = [
+    '0.0.0.0', 
+    '127.0.0.1',
+    'hello-world-65z3ddbfoa-nn.a.run.app',
+    'hello-world-vlfae7w5dq-nn.a.run.app',
+    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+    'hello-world-app-vlfae7w5dq-nn.a.run.app',
+    'hello-world-vlfae7w5dq-nn.a.run.app'
+    ]
 
 
 # Application definition
@@ -117,50 +117,36 @@ db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 url = urlparse(db_url)
 
 
-# if os.environ.get('K_REVISION', None): # checks if running in docker 
+if 'K_SERVICE' in os.environ: # checks if running in cloud run 
     
-#     DATABASES = {
-#         'default': {
-#             # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-#             # 'HOST': '127.0.0.1',
-#             'NAME': url.path[1:],
-#             'USER': url.username,
-#             'PASSWORD': url.password,
-#         }
-#     }
-# else:
-#     DATABASES = {
-#             'default': {
-#                 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#                 'ENGINE': 'django.db.backends.postgresql',
-#                 # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-#                 'HOST': '127.0.0.1',
-#                 'NAME': url.path[1:],
-#                 'USER': url.username,
-#                 'PASSWORD': url.password,
-#             }
-#         }
-
-DATABASES = {}
-
-try:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
+    DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+            # 'HOST': '127.0.0.1',
+            'NAME': url.path[1:],
+            'USER': url.username,
+            'PASSWORD': url.password,
+        }
     }
-except Exception:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '127.0.0.1',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
-    }
+else:
+    DATABASES = {
+            'default': {
+                # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'ENGINE': 'django.db.backends.postgresql',
+                # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+                'HOST': '127.0.0.1',
+                'NAME': url.path[1:],
+                'USER': url.username,
+                'PASSWORD': url.password,
+            }
+        }
+# If the flag as been set, configure to use proxy
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "127.0.0.1"
+    DATABASES["default"]["PORT"] = 5432
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
