@@ -117,31 +117,31 @@ db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 url = urlparse(db_url)
 
 
-if 'K_SERVICE' in os.environ: # checks if running in cloud run 
+# if 'K_SERVICE' in os.environ: # checks if running in cloud run 
     
-    DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'ENGINE': 'django.db.backends.postgresql',
-            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-            # 'HOST': '127.0.0.1',
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
-        }
+DATABASES = {
+    'default': {
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+        # 'HOST': '127.0.0.1',
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'PASSWORD': url.password,
     }
-else:
-    DATABASES = {
-            'default': {
-                # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'ENGINE': 'django.db.backends.postgresql',
-                # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-                'HOST': '127.0.0.1',
-                'NAME': url.path[1:],
-                'USER': url.username,
-                'PASSWORD': url.password,
-            }
-        }
+}
+# else:
+#     DATABASES = {
+#             'default': {
+#                 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#                 'ENGINE': 'django.db.backends.postgresql',
+#                 # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#                 'HOST': '127.0.0.1',
+#                 'NAME': url.path[1:],
+#                 'USER': url.username,
+#                 'PASSWORD': url.password,
+#             }
+#         }
 # # If the flag as been set, configure to use proxy
 # if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
 #     DATABASES["default"]["HOST"] = "127.0.0.1"
