@@ -130,9 +130,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
         # 'HOST': '127.0.0.1',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
+        'NAME': hello-world-db,
+        'USER': hello-world-user,
+        'PASSWORD': TpMr1FbaoD7ThuX9@localhost,
+        'PORT': '5432'
     }
 }
 # else:
