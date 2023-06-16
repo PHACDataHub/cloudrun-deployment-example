@@ -30,11 +30,13 @@ ENTRYPOINT ["./entrypoint.sh"]
 # RUN python manage.py makemigrations
 # RUN python manage.py migrate
 
-# Expose port
-EXPOSE 8080
+# # Expose port
+# EXPOSE 8080
 
-# When container starts:
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+# # When container starts:
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+ENV PORT 8080
+CMD gunicorn --bind :$PORT --workers 3 config.wsgi
 
 # #---------------------
 # FROM python:3.9-slim as compiler
