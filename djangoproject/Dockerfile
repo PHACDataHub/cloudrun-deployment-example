@@ -36,7 +36,7 @@ ENTRYPOINT ["./entrypoint.sh"]
 # # When container starts:
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
 ENV PORT 8080
-CMD gunicorn --bind :$PORT --workers 3 config.wsgi
+CMD gunicorn --bind :$PORT --workers 3 djangoproject.wsgi
 
 # #---------------------
 # FROM python:3.9-slim as compiler
