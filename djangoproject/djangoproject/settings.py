@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import environ
 import psycopg2
-import dj_database_url
+
 from urllib.parse import urlparse
 from google.cloud import secretmanager
 
