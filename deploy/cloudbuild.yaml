@@ -102,8 +102,8 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
         "--region",
         "${_REGION}",
-        # "--add-cloudsql-instances",
-        # "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
+        "--add-cloudsql-instances",
+        "${PROJECT_ID}:${_REGION}:${_SQL_INSTANCE_NAME}", 
         # "--set-secrets",
         # "DATABASE_URL=hello-world-env-secret-DATABASE_URL:latest",
         "--platform", 
@@ -131,7 +131,7 @@ steps:
   #   waitFor:
   #   - "deploy container image to cloud run"
   
-  
+
   # # From google example:
   # - id: "apply migrations"
   #   name: "gcr.io/google-appengine/exec-wrapper"
