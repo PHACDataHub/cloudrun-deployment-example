@@ -23,6 +23,7 @@ def get_secret(secret_name):
     response = client.access_secret_version(request={"name": secret_path})
     return response.payload.data.decode("UTF-8")
 
+# If using environment variables 
 env = environ.Env()
 environ.Env.read_env()
 
@@ -38,16 +39,27 @@ SECRET_KEY = 'django-insecure-%au08n9!^x1el5)43!=fpxnav(&nsh9b4m=4c#chx68-1)q+4*
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# SECURITY WARNING: It's recommended that you use this when
+# running in production. The URL will be known once you first deploy
+# to Cloud Run. This code takes the URL and converts it to both these settings formats.
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+if CLOUDRUN_SERVICE_URL:
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = [
-    '0.0.0.0', 
-    '127.0.0.1',
-    'hello-world-65z3ddbfoa-nn.a.run.app',
-    'hello-world-vlfae7w5dq-nn.a.run.app',
-    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
-    'hello-world-app-vlfae7w5dq-nn.a.run.app',
-    'hello-world-vlfae7w5dq-nn.a.run.app'
-    ]
+# ALLOWED_HOSTS = [
+#     '0.0.0.0', 
+#     '127.0.0.1',
+#     'hello-world-65z3ddbfoa-nn.a.run.app',
+#     'hello-world-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-app-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-vlfae7w5dq-nn.a.run.app'
+#     ]
 
 
 # Application definition
@@ -61,6 +73,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'helloworld',
     "hello_world.apps.HelloworldConfig",
+    'whitenoise.runserver_nostatic',
 
 ]
 
@@ -72,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -99,17 +113,46 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangoproject.wsgi.application'
 
+db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+url = urlparse(db_url)
+
+
+if os.environ.get('K_REVISION', None): # checks if running in docker 
+    
+    DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+            # 'HOST': '127.0.0.1',
+            'NAME': url.path[1:],
+            'USER': url.username,
+            'PASSWORD': url.password,
+        }
+    }
+else:
+    DATABASES = {
+            'default': {
+                # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'ENGINE': 'django.db.backends.postgresql',
+                # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+                'HOST': '127.0.0.1',
+                'NAME': url.path[1:],
+                'USER': url.username,
+                'PASSWORD': url.password,
+            }
+        }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # ---- IF USING PROXY --- (https://cloud.google.com/python/django/run)
 # # Use django-environ to parse the connection string
@@ -127,9 +170,22 @@ db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 # (VALUES FROM hello-world-env-secret-DATABASE_URL below)
 # postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
+# so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # echo $PRIMARY_INSTANCE_IP:
 # 35.203.114.222
 url = urlparse(db_url)
+DATABASES = {
+    'default': {
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+        'HOST': '127.0.0.1',
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'PASSWORD': url.password,
+    }
+}
+
 
 # modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s, but also tried many other options (including the options field for host - basically need to set host to local host and have it realize its a socket)
 # DATABASES = {
@@ -212,6 +268,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIR = [str(BASE_DIR.joinpath('static'))]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

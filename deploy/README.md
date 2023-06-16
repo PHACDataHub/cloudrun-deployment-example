@@ -1,5 +1,10 @@
+
+Notes here on auth proxy (from https://towardsdatascience.com/how-to-connect-to-gcp-cloud-sql-with-cloud-sql-auth-proxy-in-docker-99bdf810c498)
+ (& has it run in background - can use this if private ip of SQL is in same VPC as cloud run)
+cloud-sql-proxy --port 13306 INSTANCE_CONNECTION_NAME --private-ip &
+
 # Deployment instructions 
-Slowly moving these to shell script (initial-gcp-sa-api-setup.sh) and will add more details there! To run:
+Slowly moving these to script (initial-gcp-sa-api-setup.sh) and will add more details there! To run:
 ### Initial GCP set up 
 
 Authorize GCP:

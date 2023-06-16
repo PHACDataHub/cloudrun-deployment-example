@@ -1,5 +1,12 @@
-# For AlloyDB side-car
+# For  side-car
 #https://cloud.google.com/run/docs/deploying#yaml
+
+#TODO healthchecks: https://cloud.google.com/run/docs/configuring/healthchecks
+
+#https://cloud.google.com/run/docs/deploying#sidecars
+# once this is populated with values from cloudbuild.yaml, update Cloud Run by:
+
+# gcloud run services replace service.yaml (or maybe deploy/service.yaml)
 
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -24,9 +31,9 @@ substitutions:
   # The must start with a "_" (_[A-Z0-9_]+)
   _SERVICE_NAME: "hello-world"
   _REGION: "northamerica-northeast1"
-  _PROJECT_ID: "pdcp-cloud-014-lilakelland"
+  _PROJECT_ID: "phx-01h1yptgmche7jcy01wzzpw2rf"
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
   _SERVICE_NAME_INGRESS: "hello-world"
-  SERVICE_NAME_SIDECAR: "hello-world-db"
+  SERVICE_NAME_SIDECAR: "hello-world-proxy"
   CONTAINER_PORT: '5000'
   SIDECAR_IMAGE: "northamerica-northeast1"

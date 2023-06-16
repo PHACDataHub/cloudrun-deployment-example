@@ -7,3 +7,4 @@ gunicorn==20.1.0
 django-environ==0.10.0
 django-storages[google]==1.12.3
 google-cloud-secret-manager
+whitenoise
