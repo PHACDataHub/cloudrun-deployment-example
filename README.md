@@ -57,6 +57,7 @@ Deployment instructions (work in progress as we iron out the details), are found
 * https://cloud.google.com/sql/docs/postgres/connect-auth-proxy#expandable-1 
 * secret management (https://cloud.google.com/secret-manager/docs/quickstart
 
+* template? https://github.com/duybtr/django-cloudrun-template
 
 CICD options (TODO - add in testing and linting steps)
 * [Cloud Build Trigger](https://cloud.google.com/run/docs/quickstarts/deploy-continuously)
