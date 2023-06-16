@@ -153,16 +153,21 @@ url = urlparse(db_url)
 # }
 
 # --------------------
-
-    # Update the 'default' database configuration
-DATABASES['default'] = {
-    'ENGINE': 'django.db.backends.postgresql',
-    'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-    'PORT': '',
-    'NAME': 'hello-world-db',
-    'USER': 'hello-world-user',
-    'PASSWORD': 'TpMr1FbaoD7ThuX9',
-}
+# https://github.com/jazzband/dj-database-url/issues/132
+# "postgres://" + user + ":" + password + "@" + urllib.parse.quote("/cloudsql/project_id:region:instance_id") + "/" + database
+# database_url = "postgres://user:password@%2Fcloudsql%2Fproject_id%3Aregion%3Ainstance_id/database"
+db_url= 'postgresql://hello-world-user:TpMr1FbaoD7ThuX9%2Fcloudsql%2Fphx-01h1yptgmche7jcy01wzzpw2rf%3Anorthamerica-northeast1%3Ahello-world-instance/hello-world-db'
+config = dj_database_url.parse(db_url)
+config['HOST'] = urllib.parse.unquote(config['HOST'])
+#     # Update the 'default' database configuration
+# DATABASES['default'] = {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#     'PORT': '',
+#     'NAME': 'hello-world-db',
+#     'USER': 'hello-world-user',
+#     'PASSWORD': 'TpMr1FbaoD7ThuX9',
+# }
 
 # else:
 #     DATABASES = {
