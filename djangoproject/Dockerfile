@@ -37,7 +37,7 @@ ENTRYPOINT ["./entrypoint.sh"]
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
 ENV PORT 8080
 # CMD sh -c "../cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance & && gunicorn --bind :$PORT --workers 3 djangoproject.wsgi"
-# CMD gunicorn --bind :$PORT --workers 3 djangoproject.wsgi
+CMD gunicorn --bind :$PORT --workers 3 djangoproject.wsgi
 # #---------------------
 # FROM python:3.9-slim as compiler
 # ENV PYTHONUNBUFFERED 1, PYTHONDONTWRITEBYTECODE=1
