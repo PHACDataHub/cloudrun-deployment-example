@@ -136,7 +136,7 @@ url = urlparse(db_url)
 #         'PORT': '5432'
 #     }
 # }
-
+#-------------------------
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
@@ -150,6 +150,19 @@ DATABASES = {
     },
     }
 }
+
+# --------------------
+
+    # Update the 'default' database configuration
+DATABASES['default'] = {
+    'ENGINE': 'django.db.backends.postgresql',
+    'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+    'PORT': '',
+    'NAME': 'hello-world-db',
+    'USER': 'hello-world-user',
+    'PASSWORD': 'TpMr1FbaoD7ThuX9',
+}
+
 # else:
 #     DATABASES = {
 #             'default': {
