@@ -20,7 +20,7 @@ COPY . .
 
 # Set executable permissions
 RUN chmod +x ./entrypoint.sh
-RUN chmod +x ../cloud_sql_proxy
+# RUN chmod +x ../cloud_sql_proxy
 
 # Specify the entrypoint as the container entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
@@ -36,7 +36,7 @@ ENTRYPOINT ["./entrypoint.sh"]
 # # When container starts:
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
 ENV PORT 8080
-CMD sh -c "../cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance & && gunicorn --bind :$PORT --workers 3 djangoproject.wsgi"
+# CMD sh -c "../cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance & && gunicorn --bind :$PORT --workers 3 djangoproject.wsgi"
 # CMD gunicorn --bind :$PORT --workers 3 djangoproject.wsgi
 # #---------------------
 # FROM python:3.9-slim as compiler
