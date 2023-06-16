@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import environ
 import psycopg2
+import dj_database_url
 from urllib.parse import urlparse
 from google.cloud import secretmanager
 
@@ -136,20 +137,20 @@ url = urlparse(db_url)
 #         'PORT': '5432'
 #     }
 # }
-#-------------------------
-DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'HOST': '',
-    'PORT': '',
-    'NAME': 'hello-world-db',
-    'USER': 'hello-world-user',
-    'PASSWORD': 'TpMr1FbaoD7ThuX9',
-    'OPTIONS': {
-        'unix_socket': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-    },
-    }
-}
+# #-------------------------
+# DATABASES = {
+#     'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'HOST': '',
+#     'PORT': '',
+#     'NAME': 'hello-world-db',
+#     'USER': 'hello-world-user',
+#     'PASSWORD': 'TpMr1FbaoD7ThuX9',
+#     'OPTIONS': {
+#         'unix_socket': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#     },
+#     }
+# }
 
 # --------------------
 
