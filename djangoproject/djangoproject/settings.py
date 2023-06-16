@@ -114,52 +114,54 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangoproject.wsgi.application'
 
-db_url = get_secret('hello-world-env-secret-DATABASE_URL')
-url = urlparse(db_url)
+# db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+# url = urlparse(db_url)
 
-# [START cloudrun_django_database_config]
-# Use django-environ to parse the connection string
-DATABASES = {"default": db_url}
-# DATABASES = {"default": env.db()}
+# # [START cloudrun_django_database_config]
+# # Use django-environ to parse the connection string
+# DATABASES = {"default": db_url}
+# # DATABASES = {"default": env.db()}
 
-# If the flag as been set, configure to use proxy
-if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
-    DATABASES["default"]["HOST"] = "127.0.0.1"
-    DATABASES["default"]["PORT"] = 5432
+# # If the flag as been set, configure to use proxy
+# if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+#     DATABASES["default"]["HOST"] = "127.0.0.1"
+#     DATABASES["default"]["PORT"] = 5432
 
 # if 'K_SERVICE' in os.environ: # checks if running in cloud run 
 # (VALUES FROM hello-world-env-secret-DATABASE_URL below)
+# postgres://hello-world-user:TpMr1FbaoD7ThuX9@//cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance/hello-world-db
 # postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
 # so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # echo $PRIMARY_INSTANCE_IP:
 # 35.203.114.222 
-# DATABASES = {
-#     'default': {
-#         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-#         # 'HOST': '127.0.0.1',
-#         'NAME': 'hello-world-db',
-#         'USER': 'hello-world-user',
-#         'PASSWORD': 'TpMr1FbaoD7ThuX9@localhost',
-#         'PORT': '5432'
-#     }
-# }
-# #-------------------------
-# DATABASES = {
-#     'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'HOST': '',
-#     'PORT': '',
-#     'NAME': 'hello-world-db',
-#     'USER': 'hello-world-user',
-#     'PASSWORD': 'TpMr1FbaoD7ThuX9',
-#     'OPTIONS': {
-#         'unix_socket': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-#     },
-#     }
-# }
+if os.getenv('K_REVISION'):
+    DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+            # 'HOST': '127.0.0.1',
+            'NAME': 'hello-world-db',
+            'USER': 'hello-world-user',
+            'PASSWORD': 'TpMr1FbaoD7ThuX9',
+
+        }
+    }
+    #-------------------------
+    # DATABASES = {
+    #     'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'HOST': '',
+    #     'PORT': '',
+    #     'NAME': 'hello-world-db',
+    #     'USER': 'hello-world-user',
+    #     'PASSWORD': 'TpMr1FbaoD7ThuX9',
+    #     'OPTIONS': {
+    #         'unix_socket': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+    #     },
+    #     }
+    # }
 
 # --------------------
 # https://github.com/jazzband/dj-database-url/issues/132
