@@ -118,7 +118,12 @@ url = urlparse(db_url)
 
 
 # if 'K_SERVICE' in os.environ: # checks if running in cloud run 
-    
+# (VALUES FROM hello-world-env-secret-DATABASE_URL below)
+# postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
+# psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
+# so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
+# echo $PRIMARY_INSTANCE_IP:
+# 35.203.114.222 
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -169,27 +174,27 @@ DATABASES = {
 #     DATABASES["default"]["PORT"] = 5432
 
 
-# ----- IF USING DAN"S SOCKET METHOD --- (DOESN NOT WORK YET!!) -------------------------
+# # ----- IF USING DAN"S SOCKET METHOD --- (DOESN NOT WORK YET!!) -------------------------
 
-db_url = get_secret('hello-world-env-secret-DATABASE_URL')
-# (VALUES FROM hello-world-env-secret-DATABASE_URL below)
-# postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
-# psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
-# so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
-# echo $PRIMARY_INSTANCE_IP:
-# 35.203.114.222
-url = urlparse(db_url)
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-        'HOST': '127.0.0.1',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
-    }
-}
+# db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+# # (VALUES FROM hello-world-env-secret-DATABASE_URL below)
+# # postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
+# # psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
+# # so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
+# # echo $PRIMARY_INSTANCE_IP:
+# # 35.203.114.222
+# url = urlparse(db_url)
+# DATABASES = {
+#     'default': {
+#         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#         'HOST': '127.0.0.1',
+#         'NAME': url.path[1:],
+#         'USER': url.username,
+#         'PASSWORD': url.password,
+#     }
+# }
 
 
 # modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s, but also tried many other options (including the options field for host - basically need to set host to local host and have it realize its a socket)
