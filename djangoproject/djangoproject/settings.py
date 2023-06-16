@@ -124,16 +124,30 @@ url = urlparse(db_url)
 # so will  ./cloud-sql-proxy phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # echo $PRIMARY_INSTANCE_IP:
 # 35.203.114.222 
+# DATABASES = {
+#     'default': {
+#         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+#         # 'HOST': '127.0.0.1',
+#         'NAME': 'hello-world-db',
+#         'USER': 'hello-world-user',
+#         'PASSWORD': 'TpMr1FbaoD7ThuX9@localhost',
+#         'PORT': '5432'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
-        # 'HOST': '127.0.0.1',
-        'NAME': 'hello-world-db',
-        'USER': 'hello-world-user',
-        'PASSWORD': 'TpMr1FbaoD7ThuX9@localhost',
-        'PORT': '5432'
+    'ENGINE': 'django.db.backends.postgresql',
+    'HOST': '',
+    'PORT': '',
+    'NAME': 'hello-world-db',
+    'USER': 'hello-world-user',
+    'PASSWORD': 'TpMr1FbaoD7ThuX9',
+    'OPTIONS': {
+        'unix_socket': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+    },
     }
 }
 # else:
