@@ -117,6 +117,15 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 url = urlparse(db_url)
 
+# [START cloudrun_django_database_config]
+# Use django-environ to parse the connection string
+DATABASES = {"default": db_url}
+# DATABASES = {"default": env.db()}
+
+# If the flag as been set, configure to use proxy
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "127.0.0.1"
+    DATABASES["default"]["PORT"] = 5432
 
 # if 'K_SERVICE' in os.environ: # checks if running in cloud run 
 # (VALUES FROM hello-world-env-secret-DATABASE_URL below)
@@ -156,9 +165,13 @@ url = urlparse(db_url)
 # https://github.com/jazzband/dj-database-url/issues/132
 # "postgres://" + user + ":" + password + "@" + urllib.parse.quote("/cloudsql/project_id:region:instance_id") + "/" + database
 # database_url = "postgres://user:password@%2Fcloudsql%2Fproject_id%3Aregion%3Ainstance_id/database"
-db_url= 'postgresql://hello-world-user:TpMr1FbaoD7ThuX9%2Fcloudsql%2Fphx-01h1yptgmche7jcy01wzzpw2rf%3Anorthamerica-northeast1%3Ahello-world-instance/hello-world-db'
-config = dj_database_url.parse(db_url)
-config['HOST'] = urllib.parse.unquote(config['HOST'])
+
+# db_url= 'postgresql://hello-world-user:TpMr1FbaoD7ThuX9%2Fcloudsql%2Fphx-01h1yptgmche7jcy01wzzpw2rf%3Anorthamerica-northeast1%3Ahello-world-instance/hello-world-db'
+# config = dj_database_url.parse(db_url)
+# config['HOST'] = urllib.parse.unquote(config['HOST'])
+
+
+
 #     # Update the 'default' database configuration
 # DATABASES['default'] = {
 #     'ENGINE': 'django.db.backends.postgresql',
