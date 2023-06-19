@@ -69,6 +69,7 @@ steps:
   #     - "migrate"
   #   waitFor:
   #     - "push image artifact registry"
+  
 
 
   - id: "deploy container image to cloud run"
