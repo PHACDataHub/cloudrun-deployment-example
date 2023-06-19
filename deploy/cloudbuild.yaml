@@ -73,7 +73,7 @@ substitutions:
   _INSTANCE_NAME: test-instance
   _REGION: northamerica-northeast1
   # _CLOUD_RUN_SERVICE_NAME: polls-service
-  _SERVICE_NAME: "hello-world"
+  _SERVICE_NAME: "hello-world-two"
   # _SERVICE_NAME: "polls-service"
   _SECRET_SETTINGS_NAME: django_settings
   _ARTIFACT_REGISTRY_REPO: "hello-world-app"
