@@ -36,23 +36,23 @@ steps:
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
   
-  - id: "apply migrations"
-    name: "gcr.io/google-appengine/exec-wrapper"
-    args:
-      [
-        "-i",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
-        "-s",
-        # "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
-        "phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance",
-        "-e",
-        "SETTINGS_NAME",
-        "${_SECRET_SETTINGS_NAME}",
-        "--",
-        "python",
-        "djangoproject/manage.py",
-        "migrate",
-      ]
+  # - id: "apply migrations"
+  #   name: "gcr.io/google-appengine/exec-wrapper"
+  #   args:
+  #     [
+  #       "-i",
+  #       "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+  #       "-s",
+  #       # "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+  #       "phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance",
+  #       "-e",
+  #       "SETTINGS_NAME",
+  #       "${_SECRET_SETTINGS_NAME}",
+  #       "--",
+  #       "python",
+  #       "djangoproject/manage.py",
+  #       "migrate",
+  #     ]
   # - id: "run migrations"
   #   name: "gcr.io/cloud-builders/docker"
   #   entrypoint: "docker"
