@@ -1,8 +1,9 @@
 # Okay - need to look at https://github.com/PHACDataHub/cpho-phase2/blob/main/server/Dockerfile for example when revisit
 FROM python:3.11-slim
 
-ENV APP_HOME /app
-WORKDIR $APP_HOME
+# ENV APP_HOME /app
+# WORKDIR $APP_HOME
+WORKDIR /app
 
 # # Install libpq-dev - not sure if 
 # RUN apt-get update \
