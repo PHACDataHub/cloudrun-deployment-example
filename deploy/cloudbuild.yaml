@@ -84,3 +84,6 @@ images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}"
 
 # [END cloudrun_django_cloudbuild]
+
+
+
