@@ -140,9 +140,9 @@ if os.getenv('K_REVISION'):
         'default': {
             # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'ENGINE': 'django.db.backends.postgresql',
-            # 'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
+            'HOST': '/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance',
             # https://github.com/prisma/prisma/issues/11171
-            'HOST': 'localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance&schema=public',
+            # 'HOST': 'localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance&schema=public',
             # 'HOST': '127.0.0.1',
             'NAME': 'hello-world-db',
             'USER': 'hello-world-user',
