@@ -13,22 +13,22 @@ steps:
     # args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
     args: ["push", "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}"]
 
-  - id: "apply migrations"
-    name: "gcr.io/google-appengine/exec-wrapper"
-    args:
-      [
-        "-i",
-        # "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}",
-        "-s",
-        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
-        "-e",
-        "SETTINGS_NAME=${_SECRET_SETTINGS_NAME}",
-        "--",
-        "python",
-        "manage.py",
-        "migrate",
-      ]
+  # - id: "apply migrations"
+  #   name: "gcr.io/google-appengine/exec-wrapper"
+  #   args:
+  #     [
+  #       "-i",
+  #       # "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
+  #       "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}",
+  #       "-s",
+  #       "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+  #       "-e",
+  #       "SETTINGS_NAME=${_SECRET_SETTINGS_NAME}",
+  #       "--",
+  #       "python",
+  #       "manage.py",
+  #       "migrate",
+  #     ]
 
   # - id: "collect static"
   #   name: "gcr.io/google-appengine/exec-wrapper"

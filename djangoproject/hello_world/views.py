@@ -1,20 +1,17 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-
-def hello(request):
-    return HttpResponse("Hello, World!")
-
-
-# https://docs.djangoproject.com/en/4.2/topics/db/queries/
-from django.shortcuts import render
-
-from django.http import HttpResponse
-# from django.template import loader
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import City
 from .forms import CityForm
 from django.contrib import messages
 
+# https://docs.djangoproject.com/en/4.2/topics/db/queries/
+
+
+# def index(request: HttpRequest) -> HttpResponse:
+#     return HttpResponse("Hello, world. You're at the polls index.")
+
+def hello(request):
+    return HttpResponse("Hello, World!")
 
 def index(request):
     all_cities = City.objects.all()
@@ -22,7 +19,6 @@ def index(request):
         "all_cities": all_cities
     }
     return render(request, "index.html", context)
-
 
 def add_city(request):
     if request.method == "POST":
