@@ -3,7 +3,7 @@ FROM python:3.11-slim
 
 # ENV APP_HOME /app
 # WORKDIR $APP_HOME
-WORKDIR /app
+WORKDIR /djangoproject
 
 # # Install libpq-dev - not sure if 
 # RUN apt-get update \
@@ -21,7 +21,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project over
-COPY . .
+# COPY . .
+COPY djangoproject/ .
 
 
 # # Set executable permissions
