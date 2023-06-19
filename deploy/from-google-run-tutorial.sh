@@ -94,7 +94,7 @@ python manage.py migrate
 # can locally connect python manage.py runserver
 
 # deploy cloud build, run database migrations and populate static assests
-gcloud builds submit --config cloudmigrate.yaml \
+gcloud builds submit --config cloudbuild.yaml \
     --substitutions _INSTANCE_NAME=test-instance, _REGION=northamerica-northeast1
 
 deploy cloud run 
