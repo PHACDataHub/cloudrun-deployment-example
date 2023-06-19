@@ -1,9 +1,9 @@
 # Okay - need to look at https://github.com/PHACDataHub/cpho-phase2/blob/main/server/Dockerfile for example when revisit
 FROM python:3.11-slim
 
-# ENV APP_HOME /app
-# WORKDIR $APP_HOME
-WORKDIR /djangoproject
+ENV APP_HOME /app
+WORKDIR $APP_HOME
+
 
 # # Install libpq-dev - not sure if 
 # RUN apt-get update \
@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project over
 # COPY . .
-COPY djangoproject/ .
+COPY . .
 
 
 # # Set executable permissions
