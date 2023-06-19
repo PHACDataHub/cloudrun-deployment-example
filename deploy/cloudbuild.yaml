@@ -11,27 +11,6 @@
   # https://medium.com/kunder/how-to-integrate-github-checks-with-google-cloud-build-and-python-tests-5fd05c4f3dff
 
 steps:
-#   - name: python:3.9
-#     id: INSTALL
-#     entrypoint: python3
-#     args:
-#     - '-m'
-#     - 'pip'
-#     - 'install'
-#     - '-t'
-#     - '.'
-#     - '-r'
-#     - 'djangoproject/requirements.txt'
-#     # python3 -m pip install -t . -r djangoproject/requirements.txt
-
-
-# # Run tests
-#   - name: 'python:3.9'
-#     id: RUN_TESTS
-#     entrypoint: 'python'
-#     args: ['djangoproject/manage.py', 'test', 'hello_world']
-
-
 
   - id: "build container image"
     name: "gcr.io/cloud-builders/docker"
@@ -56,22 +35,22 @@ steps:
         "push",
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
       ]
-
-# # from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
-#   - name: "gcr.io/cloud-builders/docker"
-#     args: ["build", "-t", "${_IMAGE_COLLECTOR}", "./collector"]
-#     id: BUILD_COLLECTOR
-#     waitFor: ["-"]
-
-# # from https://github.com/GoogleCloudPlatform/opentelemetry-cloud-run/blob/main/cloudbuild.yaml
-#   - name: "gcr.io/cloud-builders/docker"
-#     args: ["push", "${_IMAGE_COLLECTOR}"]
-#     id: PUSH_COLLECTOR
-#     waitFor:
-#       - BUILD_COLLECTOR
-#   # This is the ~ to:
-#   # $ docker push northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/hello-world-app/hello-world
-
+  
+  - id: "apply migrations"
+    name: "gcr.io/google-appengine/exec-wrapper"
+    args:
+      [
+        "-i",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}",
+        "-s",
+        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "SETTINGS_NAME=${_SECRET_SETTINGS_NAME}",
+        "--",
+        "python",
+        "djangoproject/manage.py",
+        "migrate",
+      ]
   # - id: "run migrations"
   #   name: "gcr.io/cloud-builders/docker"
   #   entrypoint: "docker"
@@ -140,6 +119,7 @@ substitutions:
   _CLOUD_RUN_SERVICE_NAME: "hello-world-from-cloud-build-trigger"
   _REGION: "northamerica-northeast1"
   _SQL_INSTANCE_NAME: "hello-world-sql-instance"
+  _SECRET_SETTINGS_NAME: django_settings
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"

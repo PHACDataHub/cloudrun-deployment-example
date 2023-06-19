@@ -10,44 +10,91 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
+# from pathlib import Path
 import os
+import io
 import environ
-import psycopg2
+# import psycopg2
 from urllib.parse import urlparse
+import google.auth
 from google.cloud import secretmanager
 
-def get_secret(secret_name):
-    client = secretmanager.SecretManagerServiceClient()
-    secret_path = client.secret_version_path('phx-01h1yptgmche7jcy01wzzpw2rf', secret_name, 'latest')
-    response = client.access_secret_version(request={"name": secret_path})
-    return response.payload.data.decode("UTF-8")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# def get_secret(secret_name):
+#     client = secretmanager.SecretManagerServiceClient()
+#     secret_path = client.secret_version_path('phx-01h1yptgmche7jcy01wzzpw2rf', secret_name, 'latest')
+#     response = client.access_secret_version(request={"name": secret_path})
+#     return response.payload.data.decode("UTF-8")
 
-env = environ.Env()
-environ.Env.read_env()
+# env = environ.Env()
+# environ.Env.read_env()
+env = environ.Env(DEBUG=(bool, True))
+env_file = os.path.join(BASE_DIR, ".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# Attempt to load the Project ID into the environment, safely failing on error.
+try:
+    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+except google.auth.exceptions.DefaultCredentialsError:
+    pass
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%au08n9!^x1el5)43!=fpxnav(&nsh9b4m=4c#chx68-1)q+4*'
+# SECRET_KEY = 'django-insecure-%au08n9!^x1el5)43!=fpxnav(&nsh9b4m=4c#chx68-1)q+4*'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.path.isfile(env_file):
+    # Use a local secret file, if provided
 
-ALLOWED_HOSTS = [
-    '0.0.0.0', 
-    '127.0.0.1',
-    'hello-world-65z3ddbfoa-nn.a.run.app',
-    'hello-world-vlfae7w5dq-nn.a.run.app',
-    'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
-    'hello-world-app-vlfae7w5dq-nn.a.run.app',
-    'hello-world-vlfae7w5dq-nn.a.run.app'
-    ]
+    env.read_env(env_file)
+# [START_EXCLUDE]
+elif os.getenv("TRAMPOLINE_CI", None):
+    # Create local settings if running with CI, for unit testing
+
+    placeholder = (
+        f"SECRET_KEY=a\n"
+        "GS_BUCKET_NAME=None\n"
+        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
+    )
+    env.read_env(io.StringIO(placeholder))
+# [END_EXCLUDE]
+elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+# [END cloudrun_django_secret_config]
+SECRET_KEY = env("SECRET_KEY")
+
+DEBUG = env("DEBUG")
+
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+if CLOUDRUN_SERVICE_URL:
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    ALLOWED_HOSTS = ["*"]
+
+# ALLOWED_HOSTS = [
+#     '0.0.0.0', 
+#     '127.0.0.1',
+#     'hello-world-65z3ddbfoa-nn.a.run.app',
+#     'hello-world-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-app-vlfae7w5dq-nn.a.run.app',
+#     'hello-world-vlfae7w5dq-nn.a.run.app'
+#     ]
 
 
 # Application definition
@@ -59,8 +106,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'helloworld',
+    'helloworld',
+    'djangoproject',
     "hello_world.apps.HelloworldConfig",
+    "storages",
 
 ]
 
@@ -74,10 +123,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
-    'https://hello-world-vlfae7w5dq-nn.a.run.app',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app',
+#     'https://hello-world-vlfae7w5dq-nn.a.run.app',
+# ]
 
 ROOT_URLCONF = 'djangoproject.urls'
 
@@ -98,18 +147,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djangoproject.wsgi.application'
+# Database
+# [START cloudrun_django_database_config]
+# Use django-environ to parse the connection string
+DATABASES = {"default": env.db()}
 
+# If the flag as been set, configure to use proxy
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "127.0.0.1"
+    DATABASES["default"]["PORT"] = 5432
+
+# [END cloudrun_django_database_config]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # ---- IF USING PROXY --- (https://cloud.google.com/python/django/run)
 # # Use django-environ to parse the connection string
@@ -123,13 +182,13 @@ DATABASES = {
 
 # ----- IF USING DAN"S SOCKET METHOD --- (DOESN NOT WORK YET!!) -------------------------
 
-db_url = get_secret('hello-world-env-secret-DATABASE_URL')
+# db_url = get_secret('hello-world-env-secret-DATABASE_URL')
 # (VALUES FROM hello-world-env-secret-DATABASE_URL below)
 # postgresql://hello-world-user:TpMr1FbaoD7ThuX9@localhost/hello-world-db?host=/cloudsql/phx-01h1yptgmche7jcy01wzzpw2rf:northamerica-northeast1:hello-world-instance
 # psql "postgresql://hello-world-user:${DB_PASSWORD}@${PRIMARY_INSTANCE_IP}/hello-world-db" (will connect successfully)
 # echo $PRIMARY_INSTANCE_IP:
 # 35.203.114.222
-url = urlparse(db_url)
+# url = urlparse(db_url)
 
 # modified via https://www.youtube.com/watch?v=cBrn5IM4mA8&t=436s, but also tried many other options (including the options field for host - basically need to set host to local host and have it realize its a socket)
 # DATABASES = {
@@ -211,7 +270,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+STATIC_URL = "/static/"
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+GS_DEFAULT_ACL = "publicRead"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
