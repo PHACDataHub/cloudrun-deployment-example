@@ -50,16 +50,16 @@ if os.path.isfile(env_file):
 # [START_EXCLUDE]
 elif os.getenv("GITHUB_WORKFLOW'", None):
     # Create local settings if running with CI, for unit testing
-    # DATABASES = {
-    #     'default': {
-    #        'ENGINE': 'django.db.backends.postgresql',
-    #        'NAME': 'github_actions',
-    #        'USER': 'postgres',
-    #        'PASSWORD': 'postgres',
-    #        'HOST': '127.0.0.1',
-    #        'PORT': '5432',
-    #     }
-    # }
+    DATABASES = {
+        'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'github_actions',
+           'USER': 'postgres',
+           'PASSWORD': 'postgres',
+           'HOST': '127.0.0.1',
+           'PORT': '5432',
+        }
+    }
 
     placeholder = (
         f"SECRET_KEY=a\n"
