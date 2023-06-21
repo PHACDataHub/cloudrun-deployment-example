@@ -8,7 +8,7 @@ Working towards deploying Django apps to Google Cloud Run, using a Cloud SQL Pos
 
 ## Currently running on
 https://hello-world-vlfae7w5dq-nn.a.run.app/ (from GitHub Actions)
-and https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/ (from Cloud Build trigger).
+and https://hello-world-three-vlfae7w5dq-nn.a.run.app (from Cloud Build trigger).
 
 ## References: 
 * Django app: https://docs.djangoproject.com/en/4.2/intro/tutorial01/
@@ -68,10 +68,13 @@ gcloud auth application-default revoke
 gcloud  auth application-default login
 ```
 # run migrations
+Change directories into <mydjangoproject>
+```
 python manage.py makemigrations
-python manage.py makemigrations helloworld
+python manage.py makemigrations <app>
 python manage.py migrate
 <!-- python manage.py collectstatic -->
+```
 
 ## Deploy
 
@@ -80,7 +83,7 @@ python manage.py migrate
 ```
 gcloud builds submit --config cloudbuild.yaml
 ```
-2. Otherwise, the project is deployed each time there is a commit to main branch
+2. Otherwise, the project is automatically deployed each time there's a commit to main branch
 
 
 TODO - waitress and

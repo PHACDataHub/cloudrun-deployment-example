@@ -3,22 +3,22 @@
 
 # ----- SET UP ENVIRONMENT VARIABLES -----
 # # # If using terminal and running commands individually - use this:
-# export INSTANCE_NAME=test-instance2
-# export PROJECT_ID=$(gcloud config get-value project) 
-# export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
-# export REGION=northamerica-northeast1
-# export SERVICE_NAME=hello-world-three
-# export SECRET_SETTINGS_NAME=django_settings2
-# export ARTIFACT_REGISTRY_REPO=hello-world-app2
-# export DB_NAME=test-db
-# export DB_USER=test-user
-# export DB_PASSWORD=password123
-# export CLOUD_BUILD_TRIGGER_NAME=django-from-scratch-trigger
-# export GITHUB_REPO_NAME=cloudrun-deployment-example
-# export CLOUD_BUILD_CONFIG_PATH=cloudbuild.yaml
-# export GITHUB_REPO_OWNER=PHACDataHub
-# # export DB_PASSWORD=$(openssl rand -base64 16 | tr -dc A-Za-z0-9 | head -c16 ; echo '')
-# export USE_CLOUD_SQL_AUTH_PROXY=true
+export PROJECT_ID=$(gcloud config get-value project) 
+export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
+export REGION=northamerica-northeast1
+export SERVICE_NAME=hello-world-three
+export SECRET_SETTINGS_NAME=django_settings2
+export ARTIFACT_REGISTRY_REPO=hello-world-app2
+export INSTANCE_NAME=test-instance2
+export DB_NAME=test-db
+export DB_USER=test-user
+export DB_PASSWORD=password123
+export CLOUD_BUILD_TRIGGER_NAME=django-from-scratch-trigger
+export GITHUB_REPO_NAME=cloudrun-deployment-example
+export CLOUD_BUILD_CONFIG_PATH=cloudbuild.yaml
+export GITHUB_REPO_OWNER=PHACDataHub
+# export DB_PASSWORD=$(openssl rand -base64 16 | tr -dc A-Za-z0-9 | head -c16 ; echo '')
+export USE_CLOUD_SQL_AUTH_PROXY=true
 
 
 # If using as a script:
