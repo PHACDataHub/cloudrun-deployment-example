@@ -1,7 +1,8 @@
 # Deployment instructions 
-Slowly moving these to shell script (initial-gcp-sa-api-setup.sh) and will add more details there! To run:
-### Initial GCP set up 
 
+# Do not use this - See [README.md in main folder](../README.md)  Need to clean this out.
+
+### Initial GCP set up 
 Authorize GCP:
 * gcloud auth login
 Set to project:
@@ -13,7 +14,7 @@ Make script executable:
 * chmod +x ./djangoproject/deploy/initial-gcp-sa-api-setup.sh
 
 Run initial set up:
-* ./djangoproject/deploy/initial-gcp-sa-api-setup.sh
+
 
 Add cloudbuild.yaml file here with steps to deploy
 
