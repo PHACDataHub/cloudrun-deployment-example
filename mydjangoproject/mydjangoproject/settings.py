@@ -34,11 +34,26 @@ if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
     DATABASES["default"]["PORT"] = 5432
 
 if "helloworld" not in INSTALLED_APPS:
-     INSTALLED_APPS += ["helloworld"] # for custom data migration
+     INSTALLED_APPS += ["helloworld"] 
 
-# Define static storage via django-storages[google]
-GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-STATICFILES_DIRS = []
-DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-GS_DEFAULT_ACL = "publicRead"
+if  "whitenoise.runserver_nostatic" not in INSTALLED_APPS:
+     INSTALLED_APPS += [ "whitenoise.runserver_nostatic"] 
+
+if  "whitenoise.middleware.WhiteNoiseMiddleware" not in MIDDLEWARE:
+     MIDDLEWARE += [ "whitenoise.middleware.WhiteNoiseMiddleware"] 
+
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_URL = 'static/'
+# STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# # Define static storage via django-storages[google]
+# GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+# STATICFILES_DIRS = []
+# DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+# STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+# GS_DEFAULT_ACL = "publicRead"
