@@ -17,8 +17,8 @@ on:
     branches:
       - main
 
-# This is workflow has 4 steps: code check (which will have been done in ci.yaml on pull request open), 
-#build docker image, push to artifact registry and deploy to cloud run
+# # This is workflow has 4 steps: code check (which will have been done in ci.yaml on pull request open), 
+# #build docker image, push to artifact registry and deploy to cloud run
 
 jobs:
   health-check-job: # health check job for testing and code formatting check
@@ -54,8 +54,8 @@ jobs:
         run: pip install -r requirements.txt
       # - name: Check Syntax # check code formatting
       #   run: pycodestyle --statistics .
-      - name: Run Migrations # run migrations to create table in side car db container
-        run: python mydjangoproject/manage.py migrate
+#       - name: Run Migrations # run migrations to create table in side car db container
+#         run: python mydjangoproject/manage.py migrate
       - name: Run Test # running tests
         run: python mydjangoproject/manage.py test
 
