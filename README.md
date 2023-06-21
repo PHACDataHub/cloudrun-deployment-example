@@ -16,6 +16,7 @@ and https://hello-world-three-vlfae7w5dq-nn.a.run.app (from Cloud Build trigger)
     * https://cloud.google.com/python/django/run 
     * https://github.com/daneroo/phac-epi-garden
 
+## Steps to Deployment
 
 ## Ready Django App:
 1. Build [app](./mydjangoproject/) with tests
@@ -27,7 +28,7 @@ and https://hello-world-three-vlfae7w5dq-nn.a.run.app (from Cloud Build trigger)
 * add settings.py file from here (and link) to include Google Cloud deployment instructions and secrets
 * change your app name in installed apps section of settings.py
 
-## Steps to set up GCP Deployment
+## Set up for GCP Deployment
 1. Authenticate 
     ```
     gcloud auth application-default login
