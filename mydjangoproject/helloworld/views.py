@@ -50,3 +50,4 @@ def delete_city(request, city_name=None):
             return redirect('index')  # Or show an error message
     else:
         return render(request, 'delete_city.html')
+

@@ -10,36 +10,109 @@ Working towards deploying Django apps to Google Cloud Run, using a Cloud SQL Pos
 https://hello-world-vlfae7w5dq-nn.a.run.app/ (from GitHub Actions)
 and https://hello-world-from-cloud-build-trigger-vlfae7w5dq-nn.a.run.app/ (from Cloud Build trigger).
 
-## Deployment options
-1. GitHub Actions to run tests on a new Pull Request.  On a push to the main branch, a Cloud Build trigger will run through the steps outlined in [cloudbuild.yaml](./cloudbuild.yaml) to build the docker image, push to the image Artifact Registry and then deploy to Cloud Run (Cloud Run can only be deployed to from the Artifact Registry).
-
-2. Capture the whole CI/CD process with GitHub Actions using [keyless authentication](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions). Dan brought up a great question - right now it's building the image with GCP, why not pull the build and push steps out of google cloud and only do the deploy to Cloud Run step with GCP.
-
-Both of these are running at the moment, but sounds like we're leaning towards the Cloud Build trigger option as it's more inline with pull based Zero Trust model.
-
-## Status 
-Working towards connecting the database instance with Cloud Run instance.  
-#### 1. Socket
-Dan has a [way that works](https://github.com/daneroo/phac-epi-garden/tree/main), but we're still struggling to get it up and running with Django.  This method connects to a local socket in the Cloud Run container that Google will 'magic-black-box' connect to  Cloud SQL (similar to [this](https://youtu.be/cBrn5IM4mA8?t=430).)
-* Pros - it works (well almost works here)
-* Cons - it uses a public IP address (with an empty whitelist), but may not be ideal in production. 
-
-#### 2. Auth Proxy 
-John's been working on the Auth Proxy method - and has it working for a [wagtail deployment](https://wagtail-cloudrun-vlfae7w5dq-uc.a.run.app/). Next is moving towards implimenting this as a sidecar for continuous deployment. 
+## References: 
+* Django app: https://docs.djangoproject.com/en/4.2/intro/tutorial01/
+* Deployment: 
+    * https://cloud.google.com/python/django/run 
+    * https://github.com/daneroo/phac-epi-garden
 
 
+## Ready Django App:
+1. Build [app](./mydjangoproject/) with tests
+2. Add requirements.txt to indicate dependencies 
+3. Add a Dockerfile for containerization 
+4. Add .dockerignore and .gitignore
+5. Modify settings.py  (https://docs.djangoproject.com/en/4.2/intro/tutorial01/)
+* rename settings.py to basesettings.py
+* add settings.py file from here (and link) to include Google Cloud deployment instructions and secrets
+* change your app name in installed apps section of settings.py
 
-Deployment instructions (work in progress as we iron out the details), are found in the [deploy folder](./deploy/), along with associated yaml and shell scripts capture the gcloud commands for set up.  
+## Steps to set up GCP Deployment
+1. Authenticate 
+    ```
+    gcloud auth application-default login
+    ```
+2. Set project Variable
+    ```
+    gcloud config set project <your project>
+    ```
+3. Enable APIs and set up service accounts and secrets for Artifact Registry, Cloud Build trigger, Cloud Run and Cloud SQL.  Provision database. 
+* Follow instructions in [deploy/gcp-initialization.sh](deploy/gcp-initialization.sh) (step by step in terminal or command prompt, or just run). 
+*Note: variables need to be modified for your project.* 
+
+* During first run through, when you're prompted with an error indication Cloud Build needs to be connected to the GitHub Repo:
+    * Log into console to perform manual steps required for deployment set up
+        * Cloud build connect to GitHub Repo
+        * Artifact Registry - select 'Check for vunerabilities
+
+* Then rerun.
+<!-- (as django manages scaling up and down, we're using a lightweight version of python, and using a python based webserver - waitress, this elimates the need for some of the packages)   -->
+## Cloud SQL Proxy (Before Cloud Deploy for intial migrations on the first go)
+(for initial makemigrations)
+1. Download [Cloud SQL Proxy](https://cloud.google.com/sql/docs/postgres/sql-proxy) 
+This is for connecting to Cloud SQL from your computer for initial set up 
+* [Link to curl command to download & install](https://cloud.google.com/sql/docs/postgres/sql-proxy#install)
+
+    ```
+    chmod +x cloud-sql-proxy 
+    ```
+* Run app locally with cloud sql proxy (note this is for non-windows machines)(https://cloud.google.com/sql/docs/sqlserver/connect-instance-auth-proxy) for other devices 
+```
+./cloud-sql-proxy $PROJECT_ID:$REGION:$INSTANCE_NAME
+```
+Note: This seems to timeout - if you get oauth2: "invalid_grant" "reauth related error (invalid_rapt):
+```
+gcloud auth application-default revoke
+```
+```
+gcloud  auth application-default login
+```
+# run migrations
+python manage.py makemigrations
+python manage.py makemigrations helloworld
+python manage.py migrate
+<!-- python manage.py collectstatic -->
+
+## Deploy
 
 
-### TODO (clean this up and/or turn into repo issues)
+1. Manually Cloud Build with no trigger:
+```
+gcloud builds submit --config cloudbuild.yaml
+```
+2. Otherwise, the project is deployed each time there is a commit to main branch
+
+
+TODO - waitress and
+TODO - ci.yaml github actions for pull request
+## After first deployment
+### Set Service URL
+* After first deployment, set SERVICE_URL environment variable (replace 'hello-world' with your Cloud Run service name in both cases.)
+* Retrieve URL (also displayed in Service Details page in Cloud Run)
+``` 
+SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --platform managed \
+    --region northamerica-northeast1 --format "value(status.url)")
+ ``` 
+
+ * Set CLOUDRUN_SERVICE_URL used in settings.py for CSRF and allowed hosts (otherwiser will have issues)
+ ```
+gcloud run services update $SERVICE_NAME \
+    --platform managed \
+    --region northamerica-northeast1 \
+    --set-env-vars CLOUDRUN_SERVICE_URL=$SERVICE_URL
+```
+** note this step will change once we have the DNS set up 
+
+
+## TO DO 
+* GitHub Actions https://www.hacksoft.io/blog/github-actions-in-action-setting-up-django-and-postgres
 
 * Determine when tests should run.  Currently, tests run on pull request can we also run these test prior to the Cloud Build (rather than concurently) on push to main? Or should we be locking downthe main branch so pull requests naturally always happen before push to main 
 * Automate/ determine gcloud command for turning on vunerability scanning for Artifact Registry
 * Connecting GitHub Repo to Cloud Build is also a manual step and requires someone's GitHub account for authorization - Keith is looking into other options/ possibilities
 * Yakima account (Config Connector for ifrastucture as code set up (IaS) has a misleading name in the IAM console - change this to something more user friendly if we don't know what it is)
 * Automate approved hosts (Dan got SSL working for DNS so may not need this?)
-
+* Docker compose to use context (add deploy folder) & tests!!
 
 <!-- 
 #### Run tests (locally)
