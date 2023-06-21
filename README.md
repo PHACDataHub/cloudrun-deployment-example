@@ -15,6 +15,8 @@ and https://hello-world-three-vlfae7w5dq-nn.a.run.app (from Cloud Build trigger)
 * Deployment: 
     * https://cloud.google.com/python/django/run 
     * https://github.com/daneroo/phac-epi-garden
+    * https://www.youtube.com/watch?v=DvwhgXpLE-I
+    * https://codelabs.developers.google.com/codelabs/cloud-run-django#5
 
 ## Steps to Deployment
 
