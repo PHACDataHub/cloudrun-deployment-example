@@ -76,7 +76,7 @@ Change directories into <mydjangoproject>
 python manage.py makemigrations
 python manage.py makemigrations <app>
 python manage.py migrate
-<!-- python manage.py collectstatic -->
+python manage.py collectstatic
 ```
 
 ## Deploy
@@ -179,3 +179,7 @@ Options:
 https://cloud.google.com/run/docs/managing/jobs
 
 gcloud run jobs update JOB_NAME --image IMAGE_URL
+
+Logging: 
+* Add structlog to requirement.txt, wsgi.py, add logging_config.py file and import module into settings.py
+* Add logging statements in code
