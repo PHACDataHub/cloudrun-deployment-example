@@ -68,21 +68,22 @@ Note: This seems to timeout - if you get oauth2: "invalid_grant" "reauth related
 gcloud auth application-default revoke
 ```
 ```
-gcloud  auth application-default login
+gcloud auth application-default login
 ```
 # run migrations
+(note here's an article re migration jobs (https://cloud.google.com/blog/topics/developers-practitioners/running-database-migrations-cloud-run-jobs) we may change the way we start this off. )
 Change directories into <mydjangoproject>
 ```
 python manage.py makemigrations
 python manage.py makemigrations <app>
 python manage.py migrate
-<!-- python manage.py collectstatic -->
+python manage.py collectstatic
 ```
 
 ## Deploy
 
 
-1. Manually Cloud Build with no trigger:
+1. Manually Cloud Build with no trigger (remove COMMIT_SHA):
 ```
 gcloud builds submit --config cloudbuild.yaml
 ```
@@ -179,3 +180,7 @@ Options:
 https://cloud.google.com/run/docs/managing/jobs
 
 gcloud run jobs update JOB_NAME --image IMAGE_URL
+
+Logging: 
+* Add structlog to requirement.txt, wsgi.py, add logging_config.py file and import module into settings.py
+* Add logging statements in code

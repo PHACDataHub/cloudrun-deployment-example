@@ -1,8 +1,10 @@
 import io
 import os
 from urllib.parse import urlparse
-
 import environ
+import structlog
+
+from .logging_config import *
 
 # Import the original settings from each template
 from .basesettings import *
@@ -10,6 +12,7 @@ from .basesettings import *
 # Load the settings from the environment variable
 env = environ.Env()
 env.read_env(io.StringIO(os.environ.get("APPLICATION_SETTINGS", None)))
+
 
 # Setting this value from django-environ
 SECRET_KEY = env("SECRET_KEY")
@@ -33,14 +36,17 @@ if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
     DATABASES["default"]["HOST"] = "127.0.0.1"
     DATABASES["default"]["PORT"] = 5432
 
+
 if "helloworld" not in INSTALLED_APPS:
      INSTALLED_APPS += ["helloworld"] 
 
+# Static Files
 if  "whitenoise.runserver_nostatic" not in INSTALLED_APPS:
      INSTALLED_APPS += [ "whitenoise.runserver_nostatic"] 
 
 if  "whitenoise.middleware.WhiteNoiseMiddleware" not in MIDDLEWARE:
      MIDDLEWARE += [ "whitenoise.middleware.WhiteNoiseMiddleware"] 
+
 
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = 'static/'
@@ -51,9 +57,13 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# IF using Google Cloud Storage for static files:
 # # Define static storage via django-storages[google]
 # GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 # STATICFILES_DIRS = []
 # DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 # STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 # GS_DEFAULT_ACL = "publicRead"
+
+
+
