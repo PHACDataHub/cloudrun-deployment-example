@@ -1,19 +1,11 @@
+# https://www.structlog.org/en/stable/
 import os
 import structlog
 import logging.config
 from google.cloud import logging as google_logging
+logging.basicConfig(level=logging.INFO)
 
 # Configure structlog
-# structlog.configure(
-#     processors=[
-#         structlog.stdlib.filter_by_level,
-#         structlog.stdlib.add_logger_name,
-#         structlog.stdlib.add_log_level,
-#         structlog.stdlib.PositionalArgumentsFormatter(),
-#         structlog.processors.JSONRenderer(),
-#     ],
-#     logger_factory=structlog.stdlib.LoggerFactory(),
-# )
 
 structlog.configure(
     processors=[
@@ -30,6 +22,7 @@ structlog.configure(
     ],
     logger_factory=structlog.stdlib.LoggerFactory(),
     cache_logger_on_first_use=True,
+    # level=logging.INFO 
 )
 
 
@@ -44,3 +37,4 @@ if 'GOOGLE_CLOUD_PROJECT' in os.environ:
     root_logger = logging.getLogger()
     root_logger.addHandler(handler)
     root_logger.setLevel(logging.DEBUG)
+

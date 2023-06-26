@@ -15,7 +15,7 @@ logger = structlog.get_logger(__name__)
 #     return HttpResponse("Hello, world. You're at the polls index.")
 
 def hello(request):
-    logger.info("**********Hit hello world")
+    logger.info("Hit hello world")
     return HttpResponse("Hello, World!")
 
 def index(request):
@@ -23,7 +23,7 @@ def index(request):
     context = {
         "all_cities": all_cities
     }
-    logger.info("********** At index")
+    logger.info("At the index")
     return render(request, "index.html", context)
 
 def add_city(request):
@@ -32,7 +32,7 @@ def add_city(request):
         if city_form.is_valid():
             city_form.save()
             messages.success(request, ('Your city was successfully added!'))
-            logger.info("********** 'Your city was successfully added!")
+            logger.info("Your city was successfully added!")
             return redirect('index')
         else:
             messages.error(request, 'Error saving form')
@@ -45,7 +45,7 @@ def add_city(request):
 
 def hello_city(request, city_name):
     city = get_object_or_404(City, city=city_name)
-    logger.info("********** 'Hello from a city!")
+    logger.info("'Hello from a city!")
     return render(request, 'hello_city.html', {'city': city})
 
 def delete_city(request, city_name=None):
@@ -56,6 +56,7 @@ def delete_city(request, city_name=None):
             city.delete()
             return redirect('index')
         except City.DoesNotExist:
+            logging.warning("text")
             logger.error('City does not exist', error=str(City.DoesNotExist), traceback=traceback.format_exc())
             return redirect('index')  # Or show an error message
         

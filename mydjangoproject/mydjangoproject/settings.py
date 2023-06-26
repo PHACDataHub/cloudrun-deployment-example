@@ -3,7 +3,7 @@ import os
 from urllib.parse import urlparse
 import environ
 import structlog
-# # Import structlog
+
 from .logging_config import *
 
 # Import the original settings from each template
@@ -66,75 +66,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # GS_DEFAULT_ACL = "publicRead"
 
 
-# # Add structured logging 
-# LOGS_DIR = os.path.join(BASE_DIR, "logs")
 
-# # Create logs directory if it doesn't exist
-# if not os.path.exists(LOGS_DIR):
-#     os.makedirs(LOGS_DIR)
-
-# if  "django_structlog.middlewares.RequestMiddleware" not in MIDDLEWARE:
-#      MIDDLEWARE += [ "django_structlog.middlewares.RequestMiddleware"]
-
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "formatters": {
-#         "json_formatter": {
-#             "()": structlog.stdlib.ProcessorFormatter,
-#             "processor": structlog.processors.JSONRenderer(),
-#         },
-#         "plain_console": {
-#             "()": structlog.stdlib.ProcessorFormatter,
-#             "processor": structlog.dev.ConsoleRenderer(),
-#         },
-#         "key_value": {
-#             "()": structlog.stdlib.ProcessorFormatter,
-#             "processor": structlog.processors.KeyValueRenderer(key_order=['timestamp', 'level', 'event', 'logger']),
-#         },
-#     },
-#     "handlers": {
-#         "console": {
-#             "class": "logging.StreamHandler",
-#             "formatter": "plain_console",
-#         },
-#         "json_file": {
-#             "class": "logging.handlers.WatchedFileHandler",
-#             "filename": os.path.join(LOGS_DIR, "json.log"),
-#             "formatter": "json_formatter",
-#         },
-#         "flat_line_file": {
-#             "class": "logging.handlers.WatchedFileHandler",
-#             "filename": os.path.join(LOGS_DIR, "flat_line.log"),
-#             "formatter": "key_value",
-#         },
-#     },
-#     "loggers": {
-#         "django_structlog": {     
-#             "handlers": ["console", "flat_line_file", "json_file"],
-#             "level": "INFO",
-#         },
-#         # Make sure to replace the following logger's name for yours
-#         "django_structlog_hello_django_project": {             
-#             "handlers": ["console", "flat_line_file", "json_file"],
-#             "level": "INFO",
-#         },
-#     }
-# }
-
-# structlog.configure(
-#     processors=[
-#         structlog.contextvars.merge_contextvars,
-#         structlog.stdlib.filter_by_level,
-#         structlog.processors.TimeStamper(fmt="iso"),
-#         structlog.stdlib.add_logger_name,
-#         structlog.stdlib.add_log_level,
-#         structlog.stdlib.PositionalArgumentsFormatter(),
-#         structlog.processors.StackInfoRenderer(),
-#         structlog.processors.format_exc_info,
-#         structlog.processors.UnicodeDecoder(),
-#         structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
-#     ],
-#     logger_factory=structlog.stdlib.LoggerFactory(),
-#     cache_logger_on_first_use=True,
-# )
