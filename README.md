@@ -2,9 +2,12 @@
 [![CI Workflow - Code check on Pull Request](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/ci.yaml&cachebust=2)
 [![CI/CD Workflow - Deploy to Cloud Run on Push to Main](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/build_deploy_cloudrun.yaml/badge.svg)](https://github.com/PHACDataHub/cloudrun-deployment-example/actions/workflows/build_deploy_cloudrun.yaml.yaml&cachebust=2)
 
+#
+## *Note - Have moved to [CPHO Phase 2](https://github.com/PHACDataHub/cpho-phase2) project to determine workflow and patterns. This project is on pause for the moment.*
+
+
 Working towards deploying Django apps to Google Cloud Run, using a Cloud SQL Postgres database and a Cloud Build GitHub Trigger for the continuous deployment.  (Also exploring Github actions push deployment as well as AlloyDB as Cloud SQL alternative)
 
-*Work in progress - determining a workflow using a hello-world app and postgres-like db, then will apply to a more applicable projects*
 
 ## Currently running on
 https://hello-world-vlfae7w5dq-nn.a.run.app/ (from GitHub Actions)
